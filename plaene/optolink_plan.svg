@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="595.44pt" height="841.68pt" viewBox="0 0 595.44 841.68" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-06T20:58:42.737940</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.7+dfsg1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 841.68 
+L 595.44 841.68 
+L 595.44 0 
+L 0 0 
+L 0 841.68 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 170.125714 164.085091 
+C 170.802482 164.085091 171.451623 163.816349 171.93017 163.338053 
+C 172.408717 162.859758 172.6776 162.210958 172.6776 161.534545 
+C 172.6776 160.858133 172.408717 160.209333 171.93017 159.731037 
+C 171.451623 159.252742 170.802482 158.984 170.125714 158.984 
+C 169.448946 158.984 168.799806 159.252742 168.321259 159.731037 
+C 167.842711 160.209333 167.573829 160.858133 167.573829 161.534545 
+C 167.573829 162.210958 167.842711 162.859758 168.321259 163.338053 
+C 168.799806 163.816349 169.448946 164.085091 170.125714 164.085091 
+z
+" clip-path="url(#pfce0f33b89)" style="stroke: #000000; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 163.037143 218.213333 
+L 177.214286 218.213333 
+L 177.214286 184.206061 
+L 163.037143 184.206061 
+L 163.037143 218.213333 
+z
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 155.948571 266.390303 
+L 184.302857 266.390303 
+L 170.125714 289.061818 
+L 155.948571 266.390303 
+z
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 191.599448 282.233311 
+Q 199.897564 276.309198 207.194742 271.099666 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #dc143c; stroke-width: 1.1; stroke-linecap: round"/>
+    <path d="M 203.218917 271.726415 
+L 207.194742 271.099666 
+L 205.310647 274.656375 
+z
+" clip-path="url(#pfce0f33b89)" style="fill: #dc143c; stroke: #dc143c; stroke-width: 1.1; stroke-linecap: round"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 191.599448 270.897554 
+Q 199.897564 264.973441 207.194742 259.763908 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #dc143c; stroke-width: 1.1; stroke-linecap: round"/>
+    <path d="M 203.218917 260.390658 
+L 207.194742 259.763908 
+L 205.310647 263.320618 
+z
+" clip-path="url(#pfce0f33b89)" style="fill: #dc143c; stroke: #dc143c; stroke-width: 1.1; stroke-linecap: round"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 130.429714 382.581818 
+L 209.821714 382.581818 
+L 209.821714 359.910303 
+L 130.429714 359.910303 
+L 130.429714 382.581818 
+z
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 396.96 164.085091 
+C 397.636768 164.085091 398.285908 163.816349 398.764456 163.338053 
+C 399.243003 162.859758 399.511886 162.210958 399.511886 161.534545 
+C 399.511886 160.858133 399.243003 160.209333 398.764456 159.731037 
+C 398.285908 159.252742 397.636768 158.984 396.96 158.984 
+C 396.283232 158.984 395.634092 159.252742 395.155544 159.731037 
+C 394.676997 160.209333 394.408114 160.858133 394.408114 161.534545 
+C 394.408114 162.210958 394.676997 162.859758 395.155544 163.338053 
+C 395.634092 163.816349 396.283232 164.085091 396.96 164.085091 
+z
+" clip-path="url(#pfce0f33b89)" style="stroke: #000000; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 389.871429 218.213333 
+L 404.048571 218.213333 
+L 404.048571 184.206061 
+L 389.871429 184.206061 
+L 389.871429 218.213333 
+z
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 396.96 277.442667 
+C 397.636768 277.442667 398.285908 277.173925 398.764456 276.695629 
+C 399.243003 276.217333 399.511886 275.568534 399.511886 274.892121 
+C 399.511886 274.215709 399.243003 273.566909 398.764456 273.088613 
+C 398.285908 272.610317 397.636768 272.341576 396.96 272.341576 
+C 396.283232 272.341576 395.634092 272.610317 395.155544 273.088613 
+C 394.676997 273.566909 394.408114 274.215709 394.408114 274.892121 
+C 394.408114 275.568534 394.676997 276.217333 395.155544 276.695629 
+C 395.634092 277.173925 396.283232 277.442667 396.96 277.442667 
+z
+" clip-path="url(#pfce0f33b89)" style="stroke: #000000; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 286.378286 365.578182 
+L 365.770286 365.578182 
+L 365.770286 342.906667 
+L 286.378286 342.906667 
+L 286.378286 365.578182 
+z
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 396.96 342.906667 
+C 402.223751 342.906667 407.272621 340.816455 410.994655 337.096375 
+C 414.71669 333.376296 416.808 328.330077 416.808 323.069091 
+C 416.808 317.808104 414.71669 312.761886 410.994655 309.041807 
+C 407.272621 305.321727 402.223751 303.231515 396.96 303.231515 
+C 391.696249 303.231515 386.647379 305.321727 382.925345 309.041807 
+C 379.20331 312.761886 377.112 317.808104 377.112 323.069091 
+C 377.112 328.330077 379.20331 333.376296 382.925345 337.096375 
+C 386.647379 340.816455 391.696249 342.906667 396.96 342.906667 
+L 396.96 342.906667 
+z
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 396.96 419.139636 
+C 397.636768 419.139636 398.285908 418.870895 398.764456 418.392599 
+C 399.243003 417.914303 399.511886 417.265503 399.511886 416.589091 
+C 399.511886 415.912678 399.243003 415.263879 398.764456 414.785583 
+C 398.285908 414.307287 397.636768 414.038545 396.96 414.038545 
+C 396.283232 414.038545 395.634092 414.307287 395.155544 414.785583 
+C 394.676997 415.263879 394.408114 415.912678 394.408114 416.589091 
+C 394.408114 417.265503 394.676997 417.914303 395.155544 418.392599 
+C 395.634092 418.870895 396.283232 419.139636 396.96 419.139636 
+z
+" clip-path="url(#pfce0f33b89)" style="stroke: #000000; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_14">
+    <path d="M 392.344745 333.268159 
+Q 394.549914 336.813742 396.164611 339.409935 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+    <path d="M 395.833239 335.847605 
+L 396.164611 339.409935 
+L 393.115924 337.537634 
+z
+" clip-path="url(#pfce0f33b89)" style="stroke: #000000; stroke-linecap: round"/>
+   </g>
+   <g id="patch_15">
+    <path d="M 350.383448 301.558204 
+Q 358.681564 307.482317 365.978742 312.69185 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #dc143c; stroke-width: 1.1; stroke-linecap: round"/>
+    <path d="M 364.094647 309.13514 
+L 365.978742 312.69185 
+L 362.002917 312.0651 
+z
+" clip-path="url(#pfce0f33b89)" style="fill: #dc143c; stroke: #dc143c; stroke-width: 1.1; stroke-linecap: round"/>
+   </g>
+   <g id="patch_16">
+    <path d="M 350.383448 290.222446 
+Q 358.681564 296.146559 365.978742 301.356092 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #dc143c; stroke-width: 1.1; stroke-linecap: round"/>
+    <path d="M 364.094647 297.799382 
+L 365.978742 301.356092 
+L 362.002917 300.729342 
+z
+" clip-path="url(#pfce0f33b89)" style="fill: #dc143c; stroke: #dc143c; stroke-width: 1.1; stroke-linecap: round"/>
+   </g>
+   <g id="patch_17">
+    <path d="M 170.125714 776.499394 
+C 182.90911 776.499394 195.170652 771.423164 204.209877 762.388686 
+C 213.249103 753.354208 218.328 741.099106 218.328 728.322424 
+C 218.328 715.545743 213.249103 703.290641 204.209877 694.256162 
+C 195.170652 685.221684 182.90911 680.145455 170.125714 680.145455 
+C 157.342319 680.145455 145.080777 685.221684 136.041551 694.256162 
+C 127.002325 703.290641 121.923429 715.545743 121.923429 728.322424 
+C 121.923429 741.099106 127.002325 753.354208 136.041551 762.388686 
+C 145.080777 771.423164 157.342319 776.499394 170.125714 776.499394 
+L 170.125714 776.499394 
+z
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_18">
+    <path d="M 149.710629 732.856727 
+C 150.913772 732.856727 152.067799 732.378965 152.91855 731.528661 
+C 153.7693 730.678357 154.247314 729.524935 154.247314 728.322424 
+C 154.247314 727.119913 153.7693 725.966492 152.91855 725.116188 
+C 152.067799 724.265884 150.913772 723.788121 149.710629 723.788121 
+C 148.507485 723.788121 147.353458 724.265884 146.502707 725.116188 
+C 145.651957 725.966492 145.173943 727.119913 145.173943 728.322424 
+C 145.173943 729.524935 145.651957 730.678357 146.502707 731.528661 
+C 147.353458 732.378965 148.507485 732.856727 149.710629 732.856727 
+z
+" clip-path="url(#pfce0f33b89)" style="fill: #dc143c; stroke: #dc143c; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_19">
+    <path d="M 190.5408 732.856727 
+C 191.743943 732.856727 192.897971 732.378965 193.748721 731.528661 
+C 194.599472 730.678357 195.077486 729.524935 195.077486 728.322424 
+C 195.077486 727.119913 194.599472 725.966492 193.748721 725.116188 
+C 192.897971 724.265884 191.743943 723.788121 190.5408 723.788121 
+C 189.337657 723.788121 188.183629 724.265884 187.332879 725.116188 
+C 186.482128 725.966492 186.004114 727.119913 186.004114 728.322424 
+C 186.004114 729.524935 186.482128 730.678357 187.332879 731.528661 
+C 188.183629 732.378965 189.337657 732.856727 190.5408 732.856727 
+z
+" clip-path="url(#pfce0f33b89)" style="fill: #2e8b57; stroke: #2e8b57; stroke-linejoin: miter"/>
+   </g>
+   <g id="line2d_1">
+    <path d="M 70.885714 161.534545 
+L 482.022857 161.534545 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #b22222; stroke-width: 2; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 70.885714 416.589091 
+L 482.022857 416.589091 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 2; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 170.125714 161.534545 
+L 170.125714 184.206061 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_4">
+    <path d="M 170.125714 218.213333 
+L 170.125714 240.884848 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_5">
+    <path d="M 170.125714 240.884848 
+L 170.125714 266.390303 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_6">
+    <path d="M 155.948571 289.061818 
+L 184.302857 289.061818 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_7">
+    <path d="M 170.125714 289.061818 
+L 170.125714 331.570909 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_8">
+    <path d="M 170.125714 331.570909 
+L 170.125714 359.910303 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_9">
+    <path d="M 396.96 161.534545 
+L 396.96 184.206061 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_10">
+    <path d="M 396.96 218.213333 
+L 396.96 240.884848 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_11">
+    <path d="M 396.96 240.884848 
+L 396.96 274.892121 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_12">
+    <path d="M 396.96 274.892121 
+L 326.074286 274.892121 
+L 326.074286 342.906667 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_13">
+    <path d="M 396.96 274.892121 
+L 396.96 303.231515 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_14">
+    <path d="M 391.289143 303.231515 
+L 391.289143 342.906667 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_15">
+    <path d="M 396.96 303.231515 
+L 391.289143 314.567273 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_16">
+    <path d="M 391.289143 331.570909 
+L 396.96 342.906667 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_17">
+    <path d="M 396.96 342.906667 
+L 396.96 416.589091 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_18">
+    <path d="M 42.531429 537.031515 
+L 552.908571 537.031515 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_19">
+    <path d="M 42.531429 556.869091 
+L 552.908571 556.869091 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_20">
+    <path d="M 42.531429 576.706667 
+L 552.908571 576.706667 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_21">
+    <path d="M 42.531429 596.544242 
+L 552.908571 596.544242 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_22">
+    <path d="M 42.531429 616.381818 
+L 552.908571 616.381818 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_23">
+    <path d="M 149.710629 716.986667 
+L 190.5408 716.986667 
+" clip-path="url(#pfce0f33b89)" style="fill: none; stroke: #000000; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: start" x="42.531429" y="42.509091" transform="rotate(-0 42.531429 42.509091)">Optolink-Lesekopf – Schaltplan</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 8.5px; font-family: 'DejaVu Sans'; text-anchor: start" x="42.531429" y="65.180606" transform="rotate(-0 42.531429 65.180606)">Vitotronic 200 KW2 · ESP32-WROOM-32U DevKitC · ESPHome heizung-optolink (192.168.178.193) · Stand 06.10.2026</text>
+   </g>
+   <g id="text_3">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #b22222" x="34.025143" y="155.866667" transform="rotate(-0 34.025143 155.866667)">3V3</text>
+   </g>
+   <g id="text_4">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start" x="34.025143" y="419.42303" transform="rotate(-0 34.025143 419.42303)">GND</text>
+   </g>
+   <g id="text_5">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start" x="182.885143" y="204.245009" transform="rotate(-0 182.885143 204.245009)">220 Ω</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 8.5px; font-family: 'DejaVu Sans'" transform="translate(68.050286 262.540041)">IR-LED 940 nm</text>
+    <text style="font-size: 8.5px; font-family: 'DejaVu Sans'" transform="translate(68.050286 272.058182)">(Chanzon 3 mm)</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: start" x="192.809143" y="255.054545" transform="rotate(-0 192.809143 255.054545)">Anode (langes Bein)</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: start" x="192.809143" y="303.231515" transform="rotate(-0 192.809143 303.231515)">Kathode (kurz, flache Seite)</text>
+   </g>
+   <g id="text_9">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="136.100571" y="375.49697" transform="rotate(-0 136.100571 375.49697)">GPIO17 (TX)</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 8.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #dc143c" x="85.062857" y="405.253333" transform="rotate(-0 85.062857 405.253333)">SENDEN → zur LINKEN Lampe</text>
+   </g>
+   <g id="text_11">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start" x="409.719429" y="204.245009" transform="rotate(-0 409.719429 204.245009)">10 kΩ</text>
+   </g>
+   <g id="text_12">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="292.049143" y="358.493333" transform="rotate(-0 292.049143 358.493333)">GPIO16 (RX)</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans'" transform="translate(422.478857 294.273265)">Kollektor (meist kurzes</text>
+    <text style="font-size: 8px; font-family: 'DejaVu Sans'" transform="translate(422.478857 303.231515)">Bein – prüfen!)</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: start" x="422.478857" y="351.408485" transform="rotate(-0 422.478857 351.408485)">Emitter (meist langes Bein)</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 8.5px; font-family: 'DejaVu Sans'" transform="translate(422.478857 316.38489)">Fototransistor</text>
+    <text style="font-size: 8.5px; font-family: 'DejaVu Sans'" transform="translate(422.478857 325.90303)">Kingbright L-93DP3C</text>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 8.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #dc143c" x="311.897143" y="405.253333" transform="rotate(-0 311.897143 405.253333)">EMPFANGEN ← von der RECHTEN Lampe</text>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 8.3px; font-family: 'DejaVu Sans'" transform="translate(42.531429 449.803997)">Achtung Beinchen: Bei der LED ist das LANGE Bein die Anode (+). Beim Fototransistor ist meist das LANGE Bein der Emitter (−)</text>
+    <text style="font-size: 8.3px; font-family: 'DejaVu Sans'" transform="translate(42.531429 459.098182)">→ vor dem Löten am Datenblatt bzw. mit dem Multimeter (Diodentest) prüfen. Falsch herum: nichts kaputt, aber keine Daten.</text>
+   </g>
+   <g id="text_18">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start" x="42.531429" y="507.275152" transform="rotate(-0 42.531429 507.275152)">Verbindung Lesekopf ↔ ESP32 (4 Dupont-Leitungen, Buchse–Buchse)</text>
+   </g>
+   <g id="text_19">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="42.531429" y="529.946667" transform="rotate(-0 42.531429 529.946667)">Leitung</text>
+   </g>
+   <g id="text_20">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="99.24" y="529.946667" transform="rotate(-0 99.24 529.946667)">ESP32-Pin</text>
+   </g>
+   <g id="text_21">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="241.011429" y="529.946667" transform="rotate(-0 241.011429 529.946667)">Im Lesekopf an</text>
+   </g>
+   <g id="text_22">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="439.491429" y="529.946667" transform="rotate(-0 439.491429 529.946667)">Farbvorschlag</text>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="42.531429" y="549.784242" transform="rotate(-0 42.531429 549.784242)">1</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="99.24" y="549.784242" transform="rotate(-0 99.24 549.784242)">3V3</text>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="241.011429" y="549.784242" transform="rotate(-0 241.011429 549.784242)">220 Ω (LED) + 10 kΩ (FT)</text>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="439.491429" y="549.784242" transform="rotate(-0 439.491429 549.784242)">rot</text>
+   </g>
+   <g id="text_27">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="42.531429" y="569.621818" transform="rotate(-0 42.531429 569.621818)">2</text>
+   </g>
+   <g id="text_28">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="99.24" y="569.621818" transform="rotate(-0 99.24 569.621818)">GND</text>
+   </g>
+   <g id="text_29">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="241.011429" y="569.621818" transform="rotate(-0 241.011429 569.621818)">Emitter Fototransistor</text>
+   </g>
+   <g id="text_30">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="439.491429" y="569.621818" transform="rotate(-0 439.491429 569.621818)">schwarz</text>
+   </g>
+   <g id="text_31">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="42.531429" y="589.459394" transform="rotate(-0 42.531429 589.459394)">3</text>
+   </g>
+   <g id="text_32">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="99.24" y="589.459394" transform="rotate(-0 99.24 589.459394)">GPIO17 / „TX2“ / „17“</text>
+   </g>
+   <g id="text_33">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="241.011429" y="589.459394" transform="rotate(-0 241.011429 589.459394)">Kathode IR-LED</text>
+   </g>
+   <g id="text_34">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="439.491429" y="589.459394" transform="rotate(-0 439.491429 589.459394)">gelb</text>
+   </g>
+   <g id="text_35">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="42.531429" y="609.29697" transform="rotate(-0 42.531429 609.29697)">4</text>
+   </g>
+   <g id="text_36">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="99.24" y="609.29697" transform="rotate(-0 99.24 609.29697)">GPIO16 / „RX2“ / „16“</text>
+   </g>
+   <g id="text_37">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="241.011429" y="609.29697" transform="rotate(-0 241.011429 609.29697)">Kollektor FT + 10 kΩ</text>
+   </g>
+   <g id="text_38">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="439.491429" y="609.29697" transform="rotate(-0 439.491429 609.29697)">grün</text>
+   </g>
+   <g id="text_39">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start" x="42.531429" y="648.972121" transform="rotate(-0 42.531429 648.972121)">Lage im Lesekopf (Blick AUF die Regelung = Blick auf die Rückseite des Kopfs)</text>
+   </g>
+   <g id="text_40">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="124.758857" y="748.16" transform="rotate(-0 124.758857 748.16)">LED</text>
+   </g>
+   <g id="text_41">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="181.467429" y="748.16" transform="rotate(-0 181.467429 748.16)">FT</text>
+   </g>
+   <g id="text_42">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: start" x="155.948571" y="685.813333" transform="rotate(-0 155.948571 685.813333)">OBEN</text>
+   </g>
+   <g id="text_43">
+    <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start" x="151.695429" y="713.585939" transform="rotate(-0 151.695429 713.585939)">14,4 mm</text>
+   </g>
+   <g id="text_44">
+    <text style="font-size: 8.8px; font-family: 'DejaVu Sans'" transform="translate(241.011429 692.962895)">• LINKE Lampe (rot, Störung) = Empfänger der Regelung</text>
+    <text style="font-size: 8.8px; font-family: 'DejaVu Sans'" transform="translate(241.011429 702.81697)">   → dort unsere IR-LED</text>
+   </g>
+   <g id="text_45">
+    <text style="font-size: 8.8px; font-family: 'DejaVu Sans'" transform="translate(241.011429 721.302289)">• RECHTE Lampe (grün, Betrieb) = Sender der Regelung</text>
+    <text style="font-size: 8.8px; font-family: 'DejaVu Sans'" transform="translate(241.011429 731.156364)">   → dort unser Fototransistor</text>
+   </g>
+   <g id="text_46">
+    <text style="font-size: 8.8px; font-family: 'DejaVu Sans'; text-anchor: start" x="241.011429" y="753.827879" transform="rotate(-0 241.011429 753.827879)">• Abstand Mitte–Mitte 14,4 mm (gemessen 06.10.), Kopf-STL ist angepasst</text>
+   </g>
+   <g id="text_47">
+    <text style="font-size: 8.8px; font-family: 'DejaVu Sans'; text-anchor: start" x="241.011429" y="770.831515" transform="rotate(-0 241.011429 770.831515)">• Widerstände sitzen im Kopf, nur 4 Leitungen zum ESP-Gehäuse</text>
+   </g>
+   <g id="text_48">
+    <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; fill: #696969" transform="translate(42.531429 813.547524)">Quelle: Schaltung nach VitoWiFi/openv-Wiki („Die Optolink-Schnittstelle“, „ESPHome-Optolink“), festgelegt 04.10.</text>
+    <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; fill: #696969" transform="translate(42.531429 821.945883)">in ~/esphome/heizung-optolink.yaml. UART 4800 8E2, Protokoll KW. Inbetriebnahme: optolink → logger: true,</text>
+    <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; fill: #696969" transform="translate(42.531429 830.344242)">Werte mit der Anzeige der Regelung vergleichen.</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pfce0f33b89">
+   <rect x="0" y="0" width="595.44" height="841.68"/>
+  </clipPath>
+ </defs>
+</svg>
