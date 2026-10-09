@@ -19,4 +19,5 @@
 | 07.10. | USB access on the PC permanently solved via a udev rule. |
 | 08.10. | Optolink enclosure printed (according to Jens). |
 | 08.10. | Documentation repo created. |
-| **09.10. 18:00** | planned: solder the read head, attach, commissioning with `logger: true`, check addresses. |
+| 09.10. | Phototransistor (L-93DP3C) not delivered; SFH 309 FA ordered from Reichelt as a fallback. Read-head appointment moved to Sat 10.10. |
+| **10.10.** | planned: solder the read head, attach, commissioning with `logger: true`, check addresses (as soon as a phototransistor is available). |

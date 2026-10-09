@@ -7,7 +7,7 @@ liest Temperaturen, Brennerzustand, Brennerstunden und **Störmeldungen** aus de
 Home Assistant weiter. **Bewusst nur lesend** – die Firmware enthält nichts, was in die Regelung schreibt.
 
 > Stand dieser Dokumentation: **08.10.2026**. Gerät geflasht und in HA, **Lesekopf noch nicht gelötet**
-> (Fototransistor kommt Fr 09.10.). Alle Optolink-Werte stehen deshalb in HA noch auf `unknown`.
+> (Fototransistor war für Fr 09.10. angekündigt, ist aber noch nicht da). Alle Optolink-Werte stehen deshalb in HA noch auf `unknown`.
 
 > **Nachbauen:** Eigene Secrets nach der Vorlage [`firmware/secrets.example.yaml`](firmware/secrets.example.yaml)
 > anlegen (WLAN, API-Schlüssel, Hotspot-Passwort) und die feste IP an das eigene Netz anpassen. Die Adressen in der
@@ -45,7 +45,7 @@ empfängt von der rechten. Der ESP32 bedient beide über einen UART (RX GPIO16 /
 | Im ESPHome Builder | ✅ fertig, online | 06.10. ~20:00 – Builder-Fassung ist ab jetzt **führend** |
 | Gehäuse (SCAD/STL) | ✅ fertig | 06.10. Maße eingetragen, 07.10. Boden + Stützen korrigiert („passt jetzt so“, Jens) |
 | Gehäuse gedruckt | ✅ gedruckt | 08.10. laut Jens (ob es exakt die Fassung vom 07.10. ist, ist nicht ausdrücklich bestätigt) |
-| Lesekopf löten | ⏳ offen | Fototransistor kommt **Fr 09.10.**, Termin 09.10. 18:00 |
+| Lesekopf löten | ⏳ offen | Fototransistor noch nicht geliefert (Stand 09.10. abends), Termin verschoben auf **Sa 10.10.** |
 | Inbetriebnahme / Adressen prüfen | ⏳ offen | nach dem Löten, mit `optolink: logger: true` |
 | HA-Automationen (Push, Ölverbrauch, Prognose) | ⏳ offen | erst nach erfolgreicher Inbetriebnahme |
 
@@ -60,7 +60,7 @@ Preise und ASINs zum Zeitpunkt der Bestellung (Amazon.de, Oktober 2026).
 | Mikrocontroller | 1 | **ESP32-WROOM-32U DevKitC V4**, USB-C, CP2102, IPEX-Antennenbuchse; Platine 48,24 × 28,15 mm | Amazon **B0F6567LB5**, 13,99 € (2 Stück bestellt, der zweite ist die Tankmessung) | ✅ geliefert 06.10., geflasht |
 | Antenne | 1 | 2,4-GHz-Antenne mit IPEX→SMA-Pigtail (SMA-Buchse Ø ~6,4 mm, 1/4″) | im Antennen-Kit des ESP32 enthalten | ✅ vorhanden |
 | IR-LED | 1 (+ Reserve) | **Chanzon** IR-LED 940 nm, 3 mm, 100 Stück (Ersatz für SFH487 / SIR 204 aus dem openv-Wiki) | Amazon **B01BVEKXNC**, 7,99 € | ✅ bestellt 04.10., Zustellung 06.10. angekündigt (Eingang nicht ausdrücklich notiert) |
-| Fototransistor | 1 (+ Reserve) | **Kingbright L-93DP3C**, 3 mm, 940 nm, 5 Stück (Ersatz für SFH309FA) | Amazon **B01M3PGVRC**, 9,77 € (Marketplace) | ⏳ bestellt, Lieferung **Fr 09.10.** |
+| Fototransistor | 1 (+ Reserve) | **Kingbright L-93DP3C**, 3 mm, 940 nm, 5 Stück (Ersatz für SFH309FA) | Amazon **B01M3PGVRC**, 9,77 € (Marketplace) | ⏳ bestellt, Lieferung war für Fr 09.10. angekündigt – noch nicht da |
 | Widerstand | 1 | 220 Ω (Vorwiderstand IR-LED) | AZ-Delivery-Widerstandssortiment | ✅ vorhanden |
 | Widerstand | 1 | 10 kΩ (Pull-up Fototransistor) | AZ-Delivery-Widerstandssortiment | ✅ vorhanden |
 | Magnete | 4 | Neodym-Scheibenmagnet **10 × 3 mm** (2 im Lesekopf, 2 im Boden des ESP-Gehäuses) | Amazon, Delaga, 50 Stück, 7,99 € | ✅ bestellt 04.10., Zustellung 06.10. angekündigt |
@@ -281,7 +281,7 @@ nicht Teil dieses Repos.
 
 | Wann | Was | Wer |
 |---|---|---|
-| **Fr 09.10.2026, 18:00** | Fototransistor da → Lesekopf löten, aufsetzen, Inbetriebnahme mit `logger: true` | Jens |
+| **Sa 10.10.2026** (verschoben vom 09.10.) | Sobald ein Fototransistor da ist → Lesekopf löten, aufsetzen, Inbetriebnahme mit `logger: true`. Kommen L-93DP3C und SFH 309 FA beide: **SFH 309 FA** nehmen (Tageslichtfilter); dessen Pinbelegung vor dem Löten im Datenblatt prüfen | Jens |
 | beim Einbau | Klären, ob „Gehäuse passt“ (07.10.) nach Druck oder nach Vorschau galt – gedruckt wurde laut Jens am 08.10. | Jens |
 | nach dem Löten | Adressen gegen das Display prüfen (v. a. Außen-, Kessel-, Warmwassertemperatur, Brennerzustand) | Jens + Claude |
 | nach dem Löten | WLAN-Signal im Keller am Einbauort ablesen (am PC −47 dBm; Testling am Kessel 04.10. −41/−42 dBm) | – |
@@ -289,7 +289,7 @@ nicht Teil dieses Repos.
 | danach | HA: Push bei Störung, Ölverbrauch, Tankprognose | Claude |
 | danach | Startwert für den Ölverbrauch erst nach der Peilung am Tank festlegen (Inhalt seit 05.10. vermutlich ~1.900 l, **unbestätigt**) | Jens |
 | offen | Stromversorgung (USB-Netzteil, Kabelweg) am Kessel klären | Jens |
-| bei Bedarf | Bei schlechtem Empfang: Bauteile gegen SFH309FA / SFH487 (Reichelt) tauschen | – |
+| bestellt 09.10. | **SFH 309 FA** (Reichelt) als Vorsorge, falls der L-93DP3C ausbleibt; SFH487 nur bei schlechtem Empfang | Jens |
 
 ---
 

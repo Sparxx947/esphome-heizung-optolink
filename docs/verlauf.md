@@ -19,4 +19,5 @@
 | 07.10. | USB-Zugriff am PC per udev-Regel dauerhaft gelöst. |
 | 08.10. | Optolink-Gehäuse gedruckt (laut Jens). |
 | 08.10. | Doku-Repo angelegt. |
-| **09.10. 18:00** | geplant: Lesekopf löten, aufsetzen, Inbetriebnahme mit `logger: true`, Adressen prüfen. |
+| 09.10. | Fototransistor (L-93DP3C) nicht geliefert; als Vorsorge SFH 309 FA bei Reichelt bestellt. Lesekopf-Termin auf Sa 10.10. verschoben. |
+| **10.10.** | geplant: Lesekopf löten, aufsetzen, Inbetriebnahme mit `logger: true`, Adressen prüfen (sobald ein Fototransistor da ist). |

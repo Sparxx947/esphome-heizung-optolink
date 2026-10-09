@@ -7,7 +7,7 @@ reads temperatures, burner state, burner hours and **fault messages** from the c
 Home Assistant. **Deliberately read-only** – the firmware contains nothing that writes to the controller.
 
 > State of this documentation: **08.10.2026**. Device flashed and in HA, **read head not yet soldered**
-> (phototransistor arrives Fri 09.10.). All Optolink values in HA are therefore still `unknown`.
+> (phototransistor was announced for Fri 09.10. but has not arrived yet). All Optolink values in HA are therefore still `unknown`.
 
 > **Rebuilding:** Create your own secrets from the template [`firmware/secrets.example.yaml`](firmware/secrets.example.yaml)
 > (Wi-Fi, API key, hotspot password) and adapt the fixed IP to your own network. The addresses in the
@@ -45,7 +45,7 @@ receives from the right one. The ESP32 drives both via a UART (RX GPIO16 / TX GP
 | In the ESPHome Builder | ✅ done, online | 06.10. ~20:00 – the Builder version is **authoritative** from now on |
 | Enclosure (SCAD/STL) | ✅ done | 06.10. dimensions entered, 07.10. floor + supports corrected ("fits like this now", Jens) |
 | Enclosure printed | ✅ printed | 08.10. according to Jens (whether it is exactly the version from 07.10. has not been explicitly confirmed) |
-| Solder read head | ⏳ open | phototransistor arrives **Fri 09.10.**, appointment 09.10. 18:00 |
+| Solder read head | ⏳ open | phototransistor not delivered yet (as of 09.10. evening), appointment moved to **Sat 10.10.** |
 | Commissioning / check addresses | ⏳ open | after soldering, with `optolink: logger: true` |
 | HA automations (push, oil consumption, forecast) | ⏳ open | only after successful commissioning |
 
@@ -60,7 +60,7 @@ Prices and ASINs at the time of ordering (Amazon.de, October 2026).
 | Microcontroller | 1 | **ESP32-WROOM-32U DevKitC V4**, USB-C, CP2102, IPEX antenna connector; board 48.24 × 28.15 mm | Amazon **B0F6567LB5**, 13.99 € (2 pieces ordered, the second one is for the tank level measurement) | ✅ delivered 06.10., flashed |
 | Antenna | 1 | 2.4 GHz antenna with IPEX→SMA pigtail (SMA socket Ø ~6.4 mm, 1/4″) | included in the ESP32's antenna kit | ✅ available |
 | IR LED | 1 (+ spare) | **Chanzon** IR LED 940 nm, 3 mm, 100 pieces (replacement for SFH487 / SIR 204 from the openv wiki) | Amazon **B01BVEKXNC**, 7.99 € | ✅ ordered 04.10., delivery announced for 06.10. (receipt not explicitly noted) |
-| Phototransistor | 1 (+ spare) | **Kingbright L-93DP3C**, 3 mm, 940 nm, 5 pieces (replacement for SFH309FA) | Amazon **B01M3PGVRC**, 9.77 € (Marketplace) | ⏳ ordered, delivery **Fri 09.10.** |
+| Phototransistor | 1 (+ spare) | **Kingbright L-93DP3C**, 3 mm, 940 nm, 5 pieces (replacement for SFH309FA) | Amazon **B01M3PGVRC**, 9.77 € (Marketplace) | ⏳ ordered, delivery was announced for Fri 09.10. – not arrived yet |
 | Resistor | 1 | 220 Ω (series resistor IR LED) | AZ-Delivery resistor assortment | ✅ available |
 | Resistor | 1 | 10 kΩ (pull-up phototransistor) | AZ-Delivery resistor assortment | ✅ available |
 | Magnets | 4 | Neodymium disc magnet **10 × 3 mm** (2 in the read head, 2 in the floor of the ESP enclosure) | Amazon, Delaga, 50 pieces, 7.99 € | ✅ ordered 04.10., delivery announced for 06.10. |
@@ -283,7 +283,7 @@ not part of this repo.
 
 | When | What | Who |
 |---|---|---|
-| **Fri 09.10.2026, 18:00** | Phototransistor arrives → solder read head, attach, commissioning with `logger: true` | Jens |
+| **Sat 10.10.2026** (moved from 09.10.) | As soon as a phototransistor is available → solder read head, attach, commissioning with `logger: true`. If both L-93DP3C and SFH 309 FA arrive: use the **SFH 309 FA** (daylight filter); check its pinout in the datasheet before soldering | Jens |
 | during installation | Clarify whether "enclosure fits" (07.10.) referred to the print or to the preview – according to Jens it was printed on 08.10. | Jens |
 | after soldering | Check addresses against the display (esp. outdoor, boiler, hot-water temperature, burner state) | Jens + Claude |
 | after soldering | Read the Wi-Fi signal in the basement at the installation location (at the PC −47 dBm; test unit at the boiler 04.10. −41/−42 dBm) | – |
@@ -291,7 +291,7 @@ not part of this repo.
 | afterwards | HA: push on fault, oil consumption, tank forecast | Claude |
 | afterwards | Set the starting value for oil consumption only after dipping the tank (content since 05.10. presumably ~1,900 l, **unconfirmed**) | Jens |
 | open | Clarify power supply (USB power supply, cable route) at the boiler | Jens |
-| if needed | In case of poor reception: replace components with SFH309FA / SFH487 (Reichelt) | – |
+| ordered 09.10. | **SFH 309 FA** (Reichelt) as a fallback in case the L-93DP3C does not arrive; SFH487 only for poor reception | Jens |
 
 ---
 
