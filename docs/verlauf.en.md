@@ -31,3 +31,4 @@
 | 12.10. | `0x7574` (controller's oil consumption) = 0 → not kept on this system. Hot-water setpoint filter (first value after restart was 5 instead of 55) and sensor "Neustart-Grund" (reset reason) added. |
 | 13.10. | **Sammelstörung** (general fault) has been reporting "on" briefly about 20× since 04:17, burner fault off, burner running normally. The controller's display shows **no fault** at the same time; fault history: 10× d1 (tank empty at the beginning of October) → read error, filter `delayed_on: 30min`. |
 | 13.10. | **DS18B20 "Zirkulation Rücklauf"** (circulation return) added on GPIO4 (4.7 kΩ soldered to the cable end, 3V3 shared via Wago), first value 46.6 °C. |
+| 13.10. 18:07 | **Brennerstörung** (burner fault) falsely "on" for 4 min (burner running, display without fault). Alarm moved into its own automation with a plausibility check: enable signal ≥ 30 min, burner hours or boiler temperature over 5 min. |

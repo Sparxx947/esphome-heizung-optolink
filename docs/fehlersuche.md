@@ -20,6 +20,7 @@
 | Warteschlange 18–22, Zeitüberschreitungen | Mehr Abfragen als der Bus schafft (~17 Lesungen/min bei 4800 Baud) | Intervalle verlängern (siehe README, Abschnitt 6) | 12.10. |
 | Warmwasser-Soll nach Neustart 5 statt 55 °C | erster Wert nach dem Start unplausibel | Filter: Werte außerhalb 30–95 °C verwerfen | 12.10. |
 | **Sammelstörung** kurz „an“ (2–17 min, ~20× am Tag), Regelung zeigt keine Störung | Lesefehler des Datenpunkts `0x0847`; Ursache offen. Auffällig: „an“ kam immer zur selben Sekunde (:06), „aus“ immer zu einer anderen (:45) – bei einem einzigen 120-s-Takt sollte es nur einen Zeitpunkt geben. **Verdacht:** Antwort eines anderen Datenpunkts falsch zugeordnet (ungeprüft) | `delayed_on: 30min`; Gegenprobe am Display, solange HA „Problem“ zeigt | 13.10. |
+| **Brennerstörung** 4 min „an“ (13.10. 18:07–18:11), Brenner lief, Regelung zeigt keine Störung | derselbe Lesefehler wie bei der Sammelstörung, jetzt an `0x0883` | Alarm mit Plausibilitätsprüfung (README, Abschnitt 8). **Lehre:** Die Kesseltemperatur ist kein Beweis für eine Flamme – sie fiel bei laufendem Brenner unter Last von 80,8 auf 71,7 °C in 5 min. Beweis sind die steigenden Brennerstunden | 13.10. |
 
 Ein weiterer Flashfehler („No more data to read“ bei 460800 Baud) trat am **Tankmessungs-ESP32** auf, nicht an diesem
 Gerät. Falls er hier auftritt: mit `esptool … --baud 115200` die fertige `firmware.factory.bin` schreiben.

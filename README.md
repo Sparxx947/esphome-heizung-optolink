@@ -46,7 +46,7 @@ empfängt von der rechten. Der ESP32 bedient beide über einen UART (RX GPIO16 /
 | Gehäuse | ✅ gedruckt | ESP-Gehäuse 07./08.10.; Lesekopf am 11.10. neu gedruckt (Fenster lagen 2,4 mm zu hoch) |
 | Lesekopf | ✅ in Betrieb | gelötet 10.10. (SFH 309), erste Antwort der Regelung 11.10., am ESP32 seit 12.10. |
 | Busauslastung | ✅ entlastet | 12.10. – Abfrageintervalle gesenkt, Warteschlange meist 0–3 |
-| HA: Push bei Brennerstörung | ✅ aktiv | nach 5 min Störung an alle Bewohner, mit Durchsage |
+| HA: Push bei Brennerstörung | ✅ aktiv, mit Plausibilitätsprüfung | 13.10. – eigene Automation; Alarm an alle mit Durchsage nur, wenn der Brenner trotz Anforderung nicht arbeitet |
 | HA: Ölverbrauch aus Brennerlaufzeit | ✅ aktiv, **nicht geeicht** | seit 12.10.; Düsendurchsatz 2,4 l/h = Typschild-Maximum, Eichung gegen die Tankmessung geplant |
 | HA: Startverzögerung + Startalarm | ✅ aktiv | 12.10. – Push, wenn der Brenner 45 min nach der Freigabe nicht startet |
 | Zirkulationsfühler DS18B20 | ✅ in Betrieb | 13.10. – GPIO4, erster Wert 46,6 °C bei laufender Pumpe |
@@ -312,7 +312,7 @@ Im Repo liegen **keine HA-Pakete** – alles ist in der HA-Oberfläche angelegt 
 
 | Vorhaben | Umsetzung | Status |
 |---|---|---|
-| Push bei **Brennerstörung** | Brennerstörung 5 min `on` → Nachricht an alle Bewohner (alle Kanäle) mit Durchsage und letztem Ölbestand der Tankmessung | ✅ aktiv |
+| Push bei **Brennerstörung** | Eigene Automation (seit 13.10.). Ausgewertet wird nur, wenn die Freigabe ≥ 30 min ansteht (der Brenner müsste laufen) oder ≥ 10 min aus ist. Dann 5 min beobachten: steigen die **Brennerstunden** (zählen nur bei Flamme) oder der Kessel → Fehlmeldung, nur stille Nachricht; Freigabe aus → ohne Startversuch keine neue Störung möglich, stille Nachricht und erneute Prüfung bei der nächsten Freigabe; sonst **Alarm an alle Bewohner mit Durchsage** und letztem Ölbestand. Fehlende Werte gelten als Alarm | ✅ aktiv, Alarmpfad noch nicht im echten Ablauf getestet |
 | Push bei **Sammelstörung** | – | ❌ bewusst nicht: die Adresse liefert gelegentlich Fehlmeldungen |
 | **Ölverbrauch** | `input_number` „Öl-Düsendurchsatz“ (2,4 l/h) × Utility-Meter „Brennerstunden seit Messbeginn“ (zählt nur Zuwächse, ESP-Ausfälle verlieren nichts) → Template „Heizöl verbraucht“ + Tageszähler | ✅ aktiv, **nicht geeicht** |
 | **Startverzögerung** | Freigabe (`0x0842` an) stempelt die Zeit, der nächste Anstieg der Brennerstarts schreibt die Wartezeit in `input_number` | ✅ aktiv |
