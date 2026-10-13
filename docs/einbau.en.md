@@ -8,7 +8,7 @@ Step by step from the components to the attached read head. Circuit diagram to k
 ## Prepare beforehand
 
 - printed parts: `kopf` (head), `kopf_deckel` (head lid), `v_schluessel` (V key), `esp`, `esp_deckel` (ESP lid) (PETG)
-- IR LED Chanzon 940 nm, phototransistor Kingbright L-93DP3C, 220 Ω, 10 kΩ
+- IR LED Chanzon 940 nm, phototransistor Osram SFH 309 (or Kingbright L-93DP3C), 220 Ω, 10 kΩ
 - 4 neodymium magnets 10 × 3 mm
 - 4 Dupont wires female–female (red, black, yellow, green)
 - ESP32-WROOM-32U DevKitC (already flashed) with antenna + IPEX→SMA pigtail
@@ -18,9 +18,11 @@ Step by step from the components to the attached read head. Circuit diagram to k
 
 1. **IR LED:** long leg = anode (+), short leg/flat side = cathode.
    Diode test: red on the anode, black on the cathode → the forward voltage is displayed.
-2. **Phototransistor L-93DP3C:** according to the datasheet **collector = short leg**, emitter = long leg.
-   Double-check with the multimeter (resistance collector→emitter drops significantly with light or remote-control IR).
-3. Installing it the wrong way round destroys nothing – you just get no data.
+2. **Phototransistor SFH 309** (likewise L-93DP3C): **collector = short leg** on the flattened side, emitter = long leg.
+   Cross-check: multimeter on 2 MΩ, red on the collector, black on the emitter, shine a phone torch on it → the value drops significantly;
+   covered → very high resistance.
+3. **Measure the resistors:** 220 Ω is red-red-**brown** – red-red-**yellow** would be 220 kΩ (exactly what happened on 10.10.).
+4. Installing it the wrong way round destroys nothing – you just get no data.
 
 ## 2. Solder the read head
 
@@ -40,8 +42,8 @@ Step by step from the components to the attached read head. Circuit diagram to k
    | black (GND) | PT emitter |
 
 4. Insulate the solder joints, route the four strands out through the cable outlet at the top (7 × 4 mm).
-5. **Two magnets** from behind into the pockets above and below the windows (0.6 mm remaining wall to the front – they hold
-   through it). Polarity such that the head sticks to the controller.
+5. **Two magnets** from behind into the pockets above and below the windows. **Caution:** on the Vitotronic 200 KW2
+   the front is made of plastic – the magnets do not hold there. Secure the head with adhesive tape (step 4.1).
 6. Plug the **V key** with its 2 mm peg into the pocket in the front (tip pointing down), glue if needed.
 7. Push on `kopf_deckel` (head lid); the cable outlet in the push-fit collar must be above the one in the head.
 
@@ -59,12 +61,27 @@ Step by step from the components to the attached read head. Circuit diagram to k
 
 ## 4. Mounting on the boiler
 
-1. Place the read head with the V key into the "V" cut-out of the Vitotronic (front left); the magnets hold it.
-   The V web protrudes 6 mm, the controller allows at most 8 mm.
+1. Place the read head with the V key into the "V" cut-out of the Vitotronic (front left) and **fix it with adhesive
+   tape**. The V web protrudes 6 mm, the controller allows at most 8 mm. If the controller does not respond, move the head
+   vertically until it responds, and only then tape it in place.
 2. Attach the ESP enclosure magnetically to the boiler sheet metal within reach of the strands.
 3. Screw the antenna onto the SMA socket.
-4. Connect USB-C power (power supply/cable route not yet defined in the notes).
+4. Connect USB-C power via a 5 V USB power supply.
 5. Continue with [`einmessen.en.md`](einmessen.en.md).
+
+## 5. Addition: circulation sensor DS18B20
+
+Plan: [`../plaene/ds18b20-zirkulation-plan.pdf`](../plaene/ds18b20-zirkulation-plan.pdf).
+
+1. Unplug USB from the ESP32, do **not** move the read head.
+2. At the cable end of the sensor, first slide on heat-shrink tubing, then solder the **4.7 kΩ resistor between red and yellow**;
+   at the same time solder a jumper wire with a female connector to yellow, and likewise to black.
+3. Check with the multimeter: red ↔ yellow ≈ 4.7 kΩ, red ↔ black and yellow ↔ black no continuity.
+4. **Wago "3.3 V":** new wire to the `3V3` pin, red wire of the read head, red wire of the sensor.
+5. Yellow to `GPIO4` (right row, directly below 16), black to a free `GND`.
+6. Lay the sensor lengthwise flat on the circulation pipe, two cable ties, pipe insulation over it.
+7. Plug USB back in; upload the firmware with `one_wire` + `dallas_temp` via OTA. A value of 85 °C or
+   −127 °C indicates a wiring fault.
 
 ## Notes
 

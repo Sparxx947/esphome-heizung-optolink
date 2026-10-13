@@ -12,11 +12,31 @@
 | SMA-Bohrung im Druck nicht nutzbar | Bohrung lag hinter der rechten Platinenauflage | Bohrung unter die Platine verlegt (`sma_z = 8`), 12 mm Lücke | 06.10. |
 | Magnettaschen gehen durch den Boden | Taschentiefe 3,2 mm > Bodenstärke 2,0 mm | `boden = 4.0` | 07.10. |
 | Platine liegt nicht auf, Pins stoßen auf | Stiftleisten laufen über die ganze Platinenlänge; durchgehende Auflagen | 4 Einzelstützen zwischen den Pinreihen (3,2 mm vom Rand, 12 mm Mitte frei) | 07.10. |
+| Optolink-Status bleibt `communication suspended`, keine Antwort | **IR-LED verpolt** eingelötet | Diodentest: rot an Anode muss ~1,1 V zeigen; umgelötet | 10.10. |
+| LED sendet trotz richtiger Polung nicht | **Vorwiderstand 220 kΩ statt 220 Ω** (Farbringe rot-rot-gelb statt rot-rot-braun) | Widerstand vor dem Löten messen | 10.10. |
+| Weiter keine Antwort, Bauteile in Ordnung | **Fenster 2,4 mm zu hoch** – V-Spitze liegt 3,5 mm unter, V-Oberkante 6,2 mm über der Lampenmitte | `v_versatz_y = 0.9`, Kopf neu gedruckt | 11.10. |
+| Kopf hält nicht | Front der Regelung ist **Kunststoff**, die Magnete greifen nicht | Klebeband (in der funktionierenden Lage) | 11.10. |
+| ESP32 „tot“, serielle Ausgabe bricht beim Boot ab | **Kein Defekt:** WLAN-Access-Point leitete auf 2,4 GHz nichts weiter; der Abbruch der seriellen Ausgabe ist normal | Vor einem Defekt-Urteil prüfen, ob andere WLAN-Geräte zur selben Zeit ausfielen; Board am USB des PCs gegenprüfen | 10./11.10. |
+| Warteschlange 18–22, Zeitüberschreitungen | Mehr Abfragen als der Bus schafft (~17 Lesungen/min bei 4800 Baud) | Intervalle verlängern (siehe README, Abschnitt 6) | 12.10. |
+| Warmwasser-Soll nach Neustart 5 statt 55 °C | erster Wert nach dem Start unplausibel | Filter: Werte außerhalb 30–95 °C verwerfen | 12.10. |
+| **Sammelstörung** kurz „an“ (2–17 min, ~20× am Tag), Regelung zeigt keine Störung | Lesefehler des Datenpunkts `0x0847`; Ursache offen. Auffällig: „an“ kam immer zur selben Sekunde (:06), „aus“ immer zu einer anderen (:45) – bei einem einzigen 120-s-Takt sollte es nur einen Zeitpunkt geben. **Verdacht:** Antwort eines anderen Datenpunkts falsch zugeordnet (ungeprüft) | `delayed_on: 30min`; Gegenprobe am Display, solange HA „Problem“ zeigt | 13.10. |
 
 Ein weiterer Flashfehler („No more data to read“ bei 460800 Baud) trat am **Tankmessungs-ESP32** auf, nicht an diesem
 Gerät. Falls er hier auftritt: mit `esptool … --baud 115200` die fertige `firmware.factory.bin` schreiben.
 
-## Erwartbare Fehlerbilder bei der Inbetriebnahme (noch nicht aufgetreten)
+## Störung an der Regelung selbst prüfen
+
+Die rote Störungsanzeige liegt **unter dem Lesekopf**. Stattdessen (Vitotronic 200 KW2, Serviceanleitung S. 39–40):
+
+| Was | Tasten |
+|---|---|
+| aktuelle Störung | **ⓘ**, mit **＋/－** blättern (nicht OK – das quittiert) |
+| quittierte Störungen | **OK** ca. 2 s |
+| Fehlerhistorie (letzte 10, **ohne Datum**) | **„Heizen und Warmwasser“ + OK** ca. 2 s, ＋/－ blättern, OK beendet; **✲ löscht alle Einträge** |
+
+Bei einer Störung blinkt außerdem im Display „Störung“. Code **d1** = Brennerstörung, **0F** = Wartung fällig (nur in der Historie).
+
+## Weitere mögliche Fehlerbilder (hier nicht aufgetreten)
 
 | Symptom | Mögliche Ursache | Prüfen / Lösung |
 |---|---|---|

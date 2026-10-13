@@ -36,7 +36,9 @@ kragen_t        = 1.2;    // Kragen-Anschlag von hinten
 v_hoehe         = 6;      // wie weit der Fuehrungs-V-Steg vorsteht (max. 8)
 v_breite        = 6.5;
 v_dicke         = 1.6;    // Stegstaerke des V
-v_versatz_y     = -1.5;   // V liegt minimal unter der Fensterlinie (wie vito.scad)
+v_versatz_y     = 0.9;    // 11.10.: Regelung gemessen: V-Spitze 3,5 mm UNTER, V-Oberkante 6,2 mm UEBER Lampenmitte.
+                          // V-Spitze (Aussenkante) = v_versatz_y - 0,55*v_breite - v_dicke/2 = -3,5. Vorher -1,5 → Fenster 2,4 mm zu hoch,
+                          // erst mit Kopf nach unten verschoben antwortete die Regelung (Kennung 20 98).
 v_zapfen        = 2;      // Zapfen des V-Schluessels in der Front
 wand            = 1.6;
 kopf_tiefe      = 12;     // Hohlraum fuer Widerstaende + Loetstellen

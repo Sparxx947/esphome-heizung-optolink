@@ -20,4 +20,14 @@
 | 08.10. | Optolink enclosure printed (according to Jens). |
 | 08.10. | Documentation repo created. |
 | 09.10. | Phototransistor (L-93DP3C) not delivered; SFH 309 FA ordered from Reichelt as a fallback. Read-head appointment moved to Sat 10.10. |
-| **10.10.** | planned: solder the read head, attach, commissioning with `logger: true`, check addresses (as soon as a phototransistor is available). |
+| 10.10. | L-93DP3C still not there → **SFH 309** (3 mm clear) bought at a local electronics shop, circuit diagram switched over, read head soldered. |
+| 10.10. evening | No response at the boiler. Two soldering faults found: **IR LED reversed polarity** and **LED series resistor 220 kΩ instead of 220 Ω** (red-red-yellow). Reflection test passed afterwards. |
+| 10.10. 19:24 | ESP32 drops out and apparently no longer boots on USB → considered **defective**, replacement ordered. **Wrong:** on 11.10. the board ran flawlessly on the PC. At the same time a Wi-Fi access point was not forwarding anything on 2.4 GHz; the serial output stopping in the middle of booting is normal and not a crash. |
+| 11.10. ~11:20 | **First response from the controller** (KW sync, identifier `20 98`) – with a Raspberry Pi as interim reader. Cause of the failed attempts: the **windows in the head were 2.4 mm too high**. Head moved down → response. |
+| 11.10. | Head redesigned (`v_versatz_y` −1.5 → 0.9) and printed – fits straight away. Magnets do not hold on the plastic front → head fixed with adhesive tape. |
+| 11.10. | **Address scan**: boiler setpoint is `0x5502` (not `0x555A`), flow setpoint does not exist on this KW2, heating circuit in use is **M2** (`0x3906`); new: hot-water setpoint, heating curve. In the interim the Pi wrote the values to HA via REST. |
+| 12.10. | **ESP32 in operation at the boiler**, Pi removed. Bus overloaded (~21 reads/min requested, ~17 possible) → intervals reduced, queue 0–3. |
+| 12.10. | HA: oil consumption from burner runtime (2.4 l/h, uncalibrated). Finding: `0x0842` is the **enable signal**, not the flame; 1–25 min until start → measurement of the start delay + start alarm after 45 min. |
+| 12.10. | `0x7574` (controller's oil consumption) = 0 → not kept on this system. Hot-water setpoint filter (first value after restart was 5 instead of 55) and sensor "Neustart-Grund" (reset reason) added. |
+| 13.10. | **Sammelstörung** (general fault) has been reporting "on" briefly about 20× since 04:17, burner fault off, burner running normally. The controller's display shows **no fault** at the same time; fault history: 10× d1 (tank empty at the beginning of October) → read error, filter `delayed_on: 30min`. |
+| 13.10. | **DS18B20 "Zirkulation Rücklauf"** (circulation return) added on GPIO4 (4.7 kΩ soldered to the cable end, 3V3 shared via Wago), first value 46.6 °C. |

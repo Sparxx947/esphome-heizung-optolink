@@ -1,8 +1,9 @@
 # Viessmann Vitola 111 / Vitotronic 200 Typ KW2 (Geraetekennung 0x2098) per Optolink
 # Hardware: ESP32-WROOM-32U DevKitC V4 (externe Antenne) + DIY-Lesekopf am „V“ der Regelung
 #   3,3 V ── 220 Ω ── IR-LED (Anode) │ Kathode ── GPIO17 (TX)    [Chanzon 940 nm, 3 mm]
-#   3,3 V ── 10 kΩ ──┬── GPIO16 (RX)                              [Kingbright L-93DP3C]
+#   3,3 V ── 10 kΩ ──┬── GPIO16 (RX)                              [Osram SFH 309, Kollektor = kurzes Bein]
 #                    └── Kollektor Fototransistor │ Emitter ── GND
+#   DS18B20 „Zirkulation Rücklauf“ (13.10.): rot 3,3 V · schwarz GND · gelb GPIO4, 4,7 kΩ gelb↔rot am Kabelende
 #   Schaltung nach VitoWiFi/openv-Wiki („Die Optolink-Schnittstelle“, „ESPHome-Optolink“).
 # Komponente: ESPHome-PR #4453 (j0ta29, Stand 17.09.2026), Protokoll KW (VS1), 4800 8E2.
 # Adressen: openv-Wiki „Adressen“, Spalte V200KW2/KW1.
@@ -28,7 +29,7 @@ external_components:
     components: [optolink]
 
 logger:
-  level: INFO       # UART0 bleibt frei fuer USB-Log, Optolink laeuft auf eigenen Pins
+  level: INFO       # 12.10. nach Inbetriebnahme zurueck von DEBUG; UART0 bleibt frei fuer USB-Log
 
 api:
   encryption:
@@ -46,13 +47,20 @@ wifi:
 
 captive_portal:
 
+debug:
+  update_interval: 3600s   # 12.10.: nur fuer den Neustart-Grund
+
 optolink:
   protocol: KW
   rx_pin: GPIO16
   tx_pin: GPIO17
-  logger: false     # fuer die Inbetriebnahme auf true stellen
+  logger: false     # 12.10.: Rohbytes aus (Inbetriebnahme abgeschlossen)
 
 text_sensor:
+  - platform: debug
+    reset_reason:
+      name: Neustart-Grund         # 12.10.: ESP32 meldet Unterspannung als „Brownout“ → Netzteil-Verdacht pruefbar
+      entity_category: diagnostic
   - platform: optolink
     type: DEVICE_INFO
     name: Gerätekennung
@@ -69,35 +77,51 @@ binary_sensor:
     name: Brennerstörung            # = Anzeige D1
     address: 0x0883
     device_class: problem
-    update_interval: 15s
+    update_interval: 120s  # 12.10. Busentlastung (vorher 15s)
   - platform: optolink
     name: Sammelstörung
     address: 0x0847
     device_class: problem
-    update_interval: 15s
+    update_interval: 120s  # 12.10. Busentlastung (vorher 15s)
+    filters:
+      # 13.10.: meldete ~20x kurz „an“, waehrend die Regelung KEINE Stoerung zeigte (Display geprueft) →
+      # Lesefehler (laengster Fehlalarm 17 min); erst melden, wenn es 30 min anhaelt.
+      - delayed_on: 30min
   - platform: optolink
     name: Brenner
     address: 0x0842                 # Zustand 1. Stufe
     device_class: running
-    update_interval: 15s
+    update_interval: 30s  # 12.10. Busentlastung (vorher 15s)
   - platform: optolink
     name: Speicherladepumpe
     address: 0x0845
     device_class: running
-    update_interval: 60s
+    update_interval: 120s  # 12.10. Busentlastung (vorher 60s)
   - platform: optolink
     name: Zirkulationspumpe
     address: 0x0846
     device_class: running
-    update_interval: 60s
+    update_interval: 120s  # 12.10. Busentlastung (vorher 60s)
   - platform: optolink
     name: Heizkreispumpe
-    address: 0x2906
+    address: 0x2906                 # A1 (ohne Mischer) — 11.10. gelesen: 0
     device_class: running
-    update_interval: 60s
+    update_interval: 1800s  # 12.10. Busentlastung (vorher 60s)
+  - platform: optolink
+    name: Heizkreispumpe M2
+    address: 0x3906                 # 11.10. gelesen: 1 (an) — 0x080C ist laut vcontrold Vorlauf M2
+    device_class: running
+    update_interval: 120s  # 12.10. Busentlastung (vorher 60s)
+
+one_wire:
+  - platform: gpio
+    pin: GPIO4               # 13.10.: DS18B20 Zirkulation, Pull-up 4,7 kΩ am Kabel
 
 sensor:
   # --- Temperaturen ---
+  - platform: dallas_temp
+    name: Zirkulation Rücklauf
+    update_interval: 60s
   - platform: optolink
     name: Außentemperatur
     address: 0x0800
@@ -132,14 +156,14 @@ sensor:
     update_interval: 60s
   - platform: optolink
     name: Kesselsolltemperatur
-    address: 0x555A
+    address: 0x5502                 # 11.10.: 0x555A liefert FF FF (nur Vitodens 20CB); 0x5502 = 79,4 °C
     bytes: 2
     div_ratio: 10
     unit_of_measurement: °C
     device_class: temperature
     state_class: measurement
     accuracy_decimals: 1
-    update_interval: 120s
+    update_interval: 300s  # 12.10. Busentlastung (vorher 120s)
   - platform: optolink
     name: Warmwassertemperatur
     address: 0x0804                 # Speicher (Sensor 5)
@@ -160,16 +184,21 @@ sensor:
     state_class: measurement
     accuracy_decimals: 1
     update_interval: 120s
+  # Vorlaufsolltemperatur entfernt 11.10.: 0x2544 (A1) und 0x3544 (M2) liefern an dieser KW2 FF FF
   - platform: optolink
-    name: Vorlaufsolltemperatur
-    address: 0x2544                 # A1M1
-    bytes: 2
-    div_ratio: 10
+    name: Warmwasser-Solltemperatur
+    address: 0x6300                 # 11.10. gelesen: 55
+    bytes: 1
     unit_of_measurement: °C
     device_class: temperature
-    state_class: measurement
-    accuracy_decimals: 1
-    update_interval: 300s
+    accuracy_decimals: 0
+    update_interval: 600s
+    filters:
+      # 12.10.: erster Wert nach Neustart war 5 statt 55 → Unplausibles verwerfen (letzter gueltiger Wert bleibt stehen).
+      # Achtung: ein bewusst unter 30 °C gestelltes Soll wuerde damit ebenfalls verschluckt.
+      - lambda: |-
+          if (x < 30.0f || x > 95.0f) return {};
+          return x;
   - platform: optolink
     name: Abgastemperatur           # nur sinnvoll, wenn ein Abgasfuehler verbaut ist
     address: 0x0808
@@ -180,7 +209,7 @@ sensor:
     state_class: measurement
     accuracy_decimals: 1
     entity_category: diagnostic
-    update_interval: 300s
+    update_interval: 1800s  # 12.10. Busentlastung (vorher 300s)
 
   # --- Zaehler fuer Verbrauch und Tankprognose ---
   - platform: optolink
@@ -190,7 +219,7 @@ sensor:
     state_class: total_increasing
     accuracy_decimals: 0
     icon: mdi:fire
-    update_interval: 300s
+    update_interval: 60s  # 12.10. minutengenau fuer Startverzoegerung + Oelverbrauch (vorher 600s)
   - platform: optolink
     name: Brennerstunden
     address: 0x08A7                 # Stufe 1, in Sekunden
@@ -200,7 +229,7 @@ sensor:
     device_class: duration
     state_class: total_increasing
     accuracy_decimals: 2
-    update_interval: 300s
+    update_interval: 60s  # 12.10. minutengenau fuer Startverzoegerung + Oelverbrauch (vorher 600s)
   - platform: optolink
     name: Ölverbrauch Regelung      # Bedeutung bei dieser Anlage unklar → erst beobachten
     address: 0x7574
@@ -211,6 +240,23 @@ sensor:
     update_interval: 1800s
 
   # --- Einstellungen (nur anzeigen) ---
+  - platform: optolink
+    name: Heizkurve Neigung
+    address: 0x2305                 # 11.10. gelesen: 14 → 1,4 (M2 0x3305 identisch)
+    bytes: 1
+    div_ratio: 10
+    accuracy_decimals: 1
+    entity_category: diagnostic
+    update_interval: 1800s
+  - platform: optolink
+    name: Heizkurve Niveau
+    address: 0x2304                 # 11.10. gelesen: 0 (M2 0x3304 identisch)
+    bytes: 1
+    min_value: -13                  # vorzeichenbehaftet
+    unit_of_measurement: K
+    accuracy_decimals: 0
+    entity_category: diagnostic
+    update_interval: 1800s
   - platform: optolink
     name: Betriebsart (Rohwert)
     address: 0x2301

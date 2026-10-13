@@ -14,7 +14,7 @@ def pfeile(x,y,richtung):
         else: ax.add_patch(FancyArrowPatch((x-10,y+d+5),(x-3,y+d),arrowstyle="-|>",mutation_scale=9,color="crimson",lw=1.1))
 T=lambda x,y,s,**k: ax.text(x,y,s,**{"fontsize":10,**k})
 T(15,282,"Optolink-Lesekopf – Schaltplan",fontsize=18,fontweight="bold")
-T(15,274,"Vitotronic 200 KW2 · ESP32-WROOM-32U DevKitC · ESPHome heizung-optolink (192.168.178.193) · Stand 06.10.2026",fontsize=8.5)
+T(15,274,"Vitotronic 200 KW2 · ESP32-WROOM-32U DevKitC · ESPHome heizung-optolink (192.168.178.193) · Stand 10.10.2026 (SFH 309)",fontsize=8.5)
 
 # Schienen
 y3, yg = 240, 150
@@ -41,13 +41,16 @@ line((xr,200),(xr,190)); line((cx-2,190),(cx-2,176)) # Basisbalken
 line((xr,190),(cx-2,186)); line((cx-2,180),(xr,176)); line((xr,176),(xr,yg)); dot(xr,yg)
 ax.add_patch(FancyArrowPatch((cx-2,180),(xr+0.3,176.3),arrowstyle="-|>",mutation_scale=8,color="black",lw=1))
 pfeile(cx-7,186,"rein")
-T(xr+9,190,"Kollektor (meist kurzes\nBein – prüfen!)",fontsize=8); T(xr+9,173,"Emitter (meist langes Bein)",fontsize=8)
-T(xr+9,182,"Fototransistor\nKingbright L-93DP3C",fontsize=8.5)
+T(xr+9,190,"Kollektor = KURZES Bein,\nabgeflachte Seite",fontsize=8); T(xr+9,173,"Emitter = langes Bein",fontsize=8)
+T(xr+9,182,"Fototransistor\nOsram SFH 309 (3 mm klar)",fontsize=8.5)
 T(xr-30,154,"EMPFANGEN ← von der RECHTEN Lampe",fontsize=8.5,color="crimson")
 
 # Hinweis Beinchen
-T(15,135,"Achtung Beinchen: Bei der LED ist das LANGE Bein die Anode (+). Beim Fototransistor ist meist das LANGE Bein der Emitter (−)\n"
-        "→ vor dem Löten am Datenblatt bzw. mit dem Multimeter (Diodentest) prüfen. Falsch herum: nichts kaputt, aber keine Daten.",fontsize=8.3)
+T(15,131,"Achtung Beinchen: LED – LANGES Bein = Anode (+). SFH 309 – KURZES Bein an der abgeflachten Seite = Kollektor\n"
+        "(Osram-Datenblatt: „Package marking: Collector“), langes Bein = Emitter (−).\n"
+        "Gegenprobe vor dem Löten (Multimeter, Widerstandsbereich 2 MΩ): ROT an Kollektor, SCHWARZ an Emitter, Handylampe drauf\n"
+        "→ Wert fällt deutlich; abdecken → sehr hochohmig. Andersherum gepolt: bleibt hochohmig.\n"
+        "Falsch herum eingelötet: nichts kaputt, aber keine Daten.",fontsize=8.0)
 
 # Tabelle Anschluesse
 T(15,118,"Verbindung Lesekopf ↔ ESP32 (4 Dupont-Leitungen, Buchse–Buchse)",fontsize=11,fontweight="bold")
@@ -69,6 +72,6 @@ T(85,49,"• LINKE Lampe (rot, Störung) = Empfänger der Regelung\n   → dort 
 T(85,39,"• RECHTE Lampe (grün, Betrieb) = Sender der Regelung\n   → dort unser Fototransistor",fontsize=8.8)
 T(85,31,"• Abstand Mitte–Mitte 14,4 mm (gemessen 06.10.), Kopf-STL ist angepasst",fontsize=8.8)
 T(85,25,"• Widerstände sitzen im Kopf, nur 4 Leitungen zum ESP-Gehäuse",fontsize=8.8)
-T(15,4,"Quelle: Schaltung nach VitoWiFi/openv-Wiki („Die Optolink-Schnittstelle“, „ESPHome-Optolink“), festgelegt 04.10.\nin ~/esphome/heizung-optolink.yaml. "
+T(15,4,"Quelle: Schaltung nach VitoWiFi/openv-Wiki („Die Optolink-Schnittstelle“, „ESPHome-Optolink“), festgelegt 04.10.\nin firmware/heizung-optolink.yaml. "
         "UART 4800 8E2, Protokoll KW. Inbetriebnahme: optolink → logger: true,\nWerte mit der Anzeige der Regelung vergleichen.",fontsize=7.5,color="dimgray")
-fig.savefig("optolink-schaltplan.pdf")
+fig.savefig("optolink-schaltplan.pdf"); fig.savefig("optolink_plan.svg")
