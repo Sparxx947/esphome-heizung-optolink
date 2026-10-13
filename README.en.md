@@ -46,7 +46,7 @@ receives from the right one. The ESP32 drives both via a UART (RX GPIO16 / TX GP
 | Enclosure | ✅ printed | ESP enclosure 07./08.10.; read head reprinted on 11.10. (windows were 2.4 mm too high) |
 | Read head | ✅ in operation | soldered 10.10. (SFH 309), first response from the controller 11.10., on the ESP32 since 12.10. |
 | Bus load | ✅ relieved | 12.10. – polling intervals reduced, queue mostly 0–3 |
-| HA: push on burner fault | ✅ active | after 5 min of fault to all household members, with announcement |
+| HA: push on burner fault | ✅ active, with plausibility check | 13.10. – own automation; alarm to everyone with announcement only if the burner does not work despite demand |
 | HA: oil consumption from burner runtime | ✅ active, **not calibrated** | since 12.10.; nozzle throughput 2.4 l/h = nameplate maximum, calibration against the tank measurement planned |
 | HA: start delay + start alarm | ✅ active | 12.10. – push if the burner has not started 45 min after the enable signal |
 | Circulation sensor DS18B20 | ✅ in operation | 13.10. – GPIO4, first value 46.6 °C with the pump running |
@@ -314,7 +314,7 @@ The repo contains **no HA packages** – everything has been created in the HA u
 
 | Plan | Implementation | Status |
 |---|---|---|
-| Push on **burner fault** | Brennerstörung `on` for 5 min → message to all household members (all channels) with announcement and the latest oil level from the tank measurement | ✅ active |
+| Push on **burner fault** | Own automation (since 13.10.). Evaluated only when the enable signal has been on for ≥ 30 min (the burner should be running) or off for ≥ 10 min. Then observe for 5 min: if the **burner hours** (count only with a flame) or the boiler temperature rise → false report, silent message only; enable signal off → no start attempt, so no new fault possible, silent message and re-check at the next enable signal; otherwise **alarm to all household members with announcement** and the latest oil level. Missing values count as alarm | ✅ active, alarm path not yet tested in a real run |
 | Push on **general fault** | – | ❌ deliberately not: the address occasionally delivers false reports |
 | **Oil consumption** | `input_number` "Öl-Düsendurchsatz" (oil nozzle throughput, 2.4 l/h) × utility meter "Brennerstunden seit Messbeginn" (burner hours since start of measurement; counts only increments, ESP outages lose nothing) → template "Heizöl verbraucht" (heating oil consumed) + daily counter | ✅ active, **not calibrated** |
 | **Start delay** | Enable signal (`0x0842` on) stamps the time, the next increase of the burner starts writes the waiting time into an `input_number` | ✅ active |

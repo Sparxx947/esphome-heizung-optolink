@@ -20,6 +20,7 @@
 | Queue 18–22, timeouts | More requests than the bus can handle (~17 reads/min at 4800 baud) | Lengthen the intervals (see README, section 6) | 12.10. |
 | Hot-water setpoint 5 instead of 55 °C after a restart | first value after start-up implausible | Filter: discard values outside 30–95 °C | 12.10. |
 | **Sammelstörung** (general fault) briefly "on" (2–17 min, ~20× a day), controller shows no fault | Read error of data point `0x0847`; cause open. Notable: "on" always came at the same second (:06), "off" always at a different one (:45) – with a single 120 s cycle there should be only one point in time. **Suspicion:** response of another data point wrongly assigned (unverified) | `delayed_on: 30min`; cross-check on the display while HA shows "Problem" | 13.10. |
+| **Brennerstörung** (burner fault) "on" for 4 min (13.10. 18:07–18:11), burner was running, controller shows no fault | the same false reading as with the general fault, now at `0x0883` | Alarm with plausibility check (README, section 8). **Lesson:** the boiler temperature is no proof of a flame – with the burner running under load it fell from 80.8 to 71.7 °C in 5 min. Proof is the rising burner hours | 13.10. |
 
 Another flashing error ("No more data to read" at 460800 baud) occurred on the **tank-level ESP32**, not on this
 device. If it occurs here: write the finished `firmware.factory.bin` with `esptool … --baud 115200`.

@@ -31,3 +31,4 @@
 | 12.10. | `0x7574` (Ölverbrauch der Regelung) = 0 → an dieser Anlage nicht geführt. Warmwasser-Soll-Filter (erster Wert nach Neustart war 5 statt 55) und Sensor „Neustart-Grund“ ergänzt. |
 | 13.10. | **Sammelstörung** meldet seit 04:17 rund 20× kurz „an“, Brennerstörung aus, Brenner läuft normal. Display der Regelung zeigt dabei **keine Störung**; Fehlerhistorie: 10× d1 (Tank leer Anfang Oktober) → Lesefehler, Filter `delayed_on: 30min`. |
 | 13.10. | **DS18B20 „Zirkulation Rücklauf“** an GPIO4 ergänzt (4,7 kΩ ans Kabelende gelötet, 3V3 per Wago geteilt), erster Wert 46,6 °C. |
+| 13.10. 18:07 | **Brennerstörung** meldet 4 min fälschlich „an“ (Brenner lief, Display ohne Störung). Alarm in eigene Automation mit Plausibilitätsprüfung verlegt: Freigabe ≥ 30 min, Brennerstunden bzw. Kessel über 5 min. |
