@@ -20,4 +20,14 @@
 | 08.10. | Optolink-Gehäuse gedruckt (laut Jens). |
 | 08.10. | Doku-Repo angelegt. |
 | 09.10. | Fototransistor (L-93DP3C) nicht geliefert; als Vorsorge SFH 309 FA bei Reichelt bestellt. Lesekopf-Termin auf Sa 10.10. verschoben. |
-| **10.10.** | geplant: Lesekopf löten, aufsetzen, Inbetriebnahme mit `logger: true`, Adressen prüfen (sobald ein Fototransistor da ist). |
+| 10.10. | L-93DP3C weiter nicht da → **SFH 309** (3 mm klar) im Elektronik-Fachhandel vor Ort gekauft, Schaltplan umgestellt, Lesekopf gelötet. |
+| 10.10. abends | Am Kessel keine Antwort. Zwei Lötfehler gefunden: **IR-LED verpolt** und **LED-Vorwiderstand 220 kΩ statt 220 Ω** (rot-rot-gelb). Danach Reflexionstest bestanden. |
+| 10.10. 19:24 | ESP32 fällt aus und bootet am USB scheinbar nicht mehr → für **defekt** gehalten, Ersatz bestellt. **Falsch:** Am 11.10. lief das Board am PC einwandfrei. Zur selben Zeit leitete ein WLAN-Access-Point auf 2,4 GHz nichts weiter; dass die serielle Ausgabe mitten im Boot abbricht, ist normal und kein Absturz. |
+| 11.10. ~11:20 | **Erste Antwort der Regelung** (KW-Sync, Kennung `20 98`) – mit einem Raspberry Pi als Übergangs-Leser. Ursache der Fehlversuche: Die **Fenster im Kopf lagen 2,4 mm zu hoch**. Kopf nach unten verschoben → Antwort. |
+| 11.10. | Kopf neu konstruiert (`v_versatz_y` −1,5 → 0,9) und gedruckt – passt auf Anhieb. Magnete halten an der Kunststofffront nicht → Kopf mit Klebeband fixiert. |
+| 11.10. | **Adress-Scan**: Kessel-Soll ist `0x5502` (nicht `0x555A`), Vorlauf-Soll gibt es an dieser KW2 nicht, genutzter Heizkreis ist **M2** (`0x3906`); neu: Warmwasser-Soll, Heizkurve. Übergangsweise schrieb der Pi die Werte per REST nach HA. |
+| 12.10. | **ESP32 am Kessel in Betrieb**, Pi abgebaut. Bus überlastet (~21 Lesungen/min angefordert, ~17 möglich) → Intervalle gesenkt, Warteschlange 0–3. |
+| 12.10. | HA: Ölverbrauch aus Brennerlaufzeit (2,4 l/h, ungeeicht). Erkenntnis: `0x0842` ist die **Freigabe**, nicht die Flamme; 1–25 min bis zum Start → Messung der Startverzögerung + Startalarm nach 45 min. |
+| 12.10. | `0x7574` (Ölverbrauch der Regelung) = 0 → an dieser Anlage nicht geführt. Warmwasser-Soll-Filter (erster Wert nach Neustart war 5 statt 55) und Sensor „Neustart-Grund“ ergänzt. |
+| 13.10. | **Sammelstörung** meldet seit 04:17 rund 20× kurz „an“, Brennerstörung aus, Brenner läuft normal. Display der Regelung zeigt dabei **keine Störung**; Fehlerhistorie: 10× d1 (Tank leer Anfang Oktober) → Lesefehler, Filter `delayed_on: 30min`. |
+| 13.10. | **DS18B20 „Zirkulation Rücklauf“** an GPIO4 ergänzt (4,7 kΩ ans Kabelende gelötet, 3V3 per Wago geteilt), erster Wert 46,6 °C. |

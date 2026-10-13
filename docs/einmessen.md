@@ -5,7 +5,7 @@
 Beim Optolink gibt es nichts analog zu kalibrieren – die Regelung liefert fertige Werte. „Einmessen“ heißt hier:
 
 1. **Kommunikation** nachweisen,
-2. **Adressen** gegen das Display der Regelung prüfen (sie stammen ungeprüft aus der openv-Tabelle),
+2. **Adressen** gegen das Display der Regelung prüfen (sie stammen aus der openv-Tabelle – hier passten drei nicht),
 3. den **Ölverbrauch** aus den Brennerstunden an echten Liefer- bzw. Peilmengen eichen.
 
 ## 1. Kommunikation nachweisen
@@ -26,6 +26,9 @@ Beim Optolink gibt es nichts analog zu kalibrieren – die Regelung liefert fert
    - **„Optolink-Warteschlange“** bleibt klein und läuft nicht stetig hoch.
 4. Kommt nichts: [`fehlersuche.md`](fehlersuche.md).
 
+**Ergebnis an dieser Anlage (11./12.10.):** Antwort erst nach Korrektur der Kopfhöhe; „Gerätekennung“ zeigt
+`Device ID: 2098|Hardware Revision: 00|Software Index: 01`. Danach `logger: false` und Logger auf `INFO`.
+
 ## 2. Adressen gegen das Display prüfen
 
 Werte in HA (oder im Log) mit der Anzeige der Vitotronic vergleichen. Abweichungen ≤ 0,5 K sind Rundung.
@@ -37,13 +40,16 @@ Werte in HA (oder im Log) mit der Anzeige der Vitotronic vergleichen. Abweichung
 | Warmwasser | Warmwassertemperatur | `0x0804` | Speichertemperatur | gleich |
 | Vorlauf | Vorlauftemperatur | `0x080C` | nur falls Fühler 17B vorhanden | sonst unplausibel/konstant |
 | Abgas | Abgastemperatur | `0x0808` | nur falls Abgasfühler verbaut | sonst unplausibel → Entität deaktivieren |
-| Brenner | Brenner | `0x0842` | Flamme / Brenner läuft | `on` während der Brenner läuft |
-| Pumpen | Speicherlade-, Zirkulations-, Heizkreispumpe | `0x0845`, `0x0846`, `0x2906` | Pumpe hörbar/fühlbar | passt zum Betrieb |
+| Brenner | Brenner | `0x0842` | Freigabe durch die Regelung | **Ergebnis:** Freigabe, nicht Flamme – der Brenner startet 1–25 min später |
+| Kessel-Soll | Kesselsolltemperatur | `0x5502` | Kesselsoll | **Ergebnis:** `0x555A` aus der Tabelle liefert FF FF, `0x5502` passt |
+| Warmwasser-Soll | Warmwasser-Solltemperatur | `0x6300` | eingestellter WW-Sollwert | **Ergebnis:** 55 °C ✅ |
+| Pumpen | Speicherlade-, Zirkulations-, Heizkreispumpe A1 / M2 | `0x0845`, `0x0846`, `0x2906` / `0x3906` | Pumpe hörbar/fühlbar | **Ergebnis:** A1 immer aus, genutzt wird **M2** |
 | Brennerstunden | Brennerstunden | `0x08A7` | Betriebsstunden in der Regelung | gleich (Sekunden ÷ 3600) |
 | Brennerstarts | Brennerstarts | `0x088A` | Brennerstarts | gleich |
 | Störung | Brennerstörung / Sammelstörung | `0x0883` / `0x0847` | Störungsanzeige | im Normalbetrieb `off` |
 | Betriebsart | Betriebsart (Rohwert) | `0x2301` | eingestellte Betriebsart | Rohwert notieren, Zuordnung beobachten |
-| Ölverbrauch Regelung | Ölverbrauch Regelung | `0x7574` | – | **Funktion unklar** – nur beobachten |
+| Ölverbrauch Regelung | Ölverbrauch Regelung | `0x7574` | – | **Ergebnis:** immer 0 – an dieser KW2 nicht geführt |
+| Vorlauf-Soll | – | `0x2544` / `0x3544` | – | **Ergebnis:** FF FF – entfernt |
 
 Nicht passende Adressen in der YAML korrigieren oder die Entität deaktivieren; das Ergebnis in [`verlauf.md`](verlauf.md)
 nachtragen. Danach `optolink: logger: false` und erneut OTA.
@@ -80,31 +86,22 @@ Ablauf:
    (die alte pneumatische Anzeige war verschlammt). Peil-Richtwerte (liegender Zylinder Ø 1,6 m, Böden vernachlässigt):
    1.500 l ≈ 42,7 cm, 1.700 l ≈ 46,7 cm, 1.900 l ≈ 50,6 cm.
 2. **Endpunkt:** bei der nächsten Lieferung bzw. nach einigen Wochen erneut peilen + Brennerstunden notieren.
-3. q nach der Formel rechnen und in HA als Faktor hinterlegen.
+3. q nach der Formel rechnen und in HA als Faktor hinterlegen (`input_number` „Öl-Düsendurchsatz“). **Nur einmal
+   eichen:** Der Template-Sensor rechnet die ganze Summe seit Messbeginn mit dem neuen Faktor neu – eine Änderung
+   erzeugt einen Sprung in der Statistik.
 4. Plausibilität: Bisherige Lieferungen (3.000 l am 20.09.2024, 3.000 l am 04.08.2025) reichten ~14 Monate;
    Jahresverbrauch ~2.800 l. Bei q = 2,38 l/h wären das ~1.180 Brennerstunden/Jahr (**abgeleitet**, nicht gemessen) –
    ein Jahreswert der Brennerstunden aus der Regelung zeigt sofort, ob q in der richtigen Größenordnung liegt.
 
-### Tankprognose (geplant)
+### Umsetzung in Home Assistant (seit 12.10.)
 
-```
-Restinhalt = Inhalt_Anfang + Lieferungen − q × (Brennerstunden_jetzt − Brennerstunden_Anfang)
-```
+| Helfer | Art | Inhalt |
+|---|---|---|
+| Öl-Düsendurchsatz | `input_number` | 2,4 l/h (Typschild-Maximum, **nicht geeicht**) |
+| Brennerstunden seit Messbeginn | Utility-Meter auf „Brennerstunden“ | zählt nur Zuwächse – ESP-Ausfälle verlieren nichts |
+| Heizöl verbraucht (Brennerlaufzeit) | Template | Brennerstunden seit Messbeginn × Düsendurchsatz, Liter, `total_increasing` |
+| Heizöl heute | Utility-Meter (täglich) | auf den Template-Sensor |
 
-Warnschwellen laut Plan: **Vorwarnung 1.500 l**, **dringend 800 l**. Ein Vorschlag für einen HA-Template-Sensor,
-noch **nicht eingerichtet** und mit **ungeprüfter** Entity-ID:
-
-```yaml
-template:
-  - sensor:
-      - name: Heizöl Restinhalt (Brennerstunden)
-        unit_of_measurement: l
-        state: >
-          {% set h = states('sensor.heizung_brennerstunden') | float(none) %}
-          {% if h is none %}{{ none }}{% else %}
-          {{ (1900 - 2.38 * (h - BRENNERSTUNDEN_BEI_PEILUNG)) | round(0) }}
-          {% endif %}
-```
-
-`1900`, `2.38` und `BRENNERSTUNDEN_BEI_PEILUNG` sind Platzhalter – besser als `input_number`-Helfer anlegen, damit
-Peilung und Lieferungen ohne YAML-Änderung nachgetragen werden können.
+Die Düse ist am Brenner nicht ablesbar, und die Regelung kennt sie nicht (`0x7574` = 0). Geeicht wird deshalb gegen
+die separate Tankmessung – über **Wochensummen**, weil deren Tageswerte stärker rauschen als der Tagesverbrauch.
+Tankprognose und Warnschwellen (Vorwarnung 1.500 l, dringend 800 l) übernimmt die Tankmessung.

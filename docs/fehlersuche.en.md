@@ -12,11 +12,31 @@
 | SMA hole not usable in the print | Hole was behind the right-hand board support | Hole moved below the board (`sma_z = 8`), 12 mm gap | 06.10. |
 | Magnet pockets go through the floor | Pocket depth 3.2 mm > floor thickness 2.0 mm | `boden = 4.0` | 07.10. |
 | Board does not sit flat, pins hit the supports | Pin headers run along the entire board length; continuous supports | 4 individual supports between the pin rows (3.2 mm from the edge, 12 mm free in the middle) | 07.10. |
+| Optolink-Status stays `communication suspended`, no response | **IR LED soldered in with reversed polarity** | Diode test: red on the anode must show ~1.1 V; resoldered | 10.10. |
+| LED does not transmit despite correct polarity | **Series resistor 220 kΩ instead of 220 Ω** (colour bands red-red-yellow instead of red-red-brown) | Measure the resistor before soldering | 10.10. |
+| Still no response, components OK | **Windows 2.4 mm too high** – the V tip is 3.5 mm below, the upper edge of the V 6.2 mm above the centre of the lamps | `v_versatz_y = 0.9`, head reprinted | 11.10. |
+| Head does not hold | The controller's front is **plastic**, the magnets do not grip | Adhesive tape (in the working position) | 11.10. |
+| ESP32 "dead", serial output stops during boot | **Not a defect:** the Wi-Fi access point did not forward anything on 2.4 GHz; the serial output stopping is normal | Before declaring a defect, check whether other Wi-Fi devices failed at the same time; cross-check the board on the PC's USB | 10./11.10. |
+| Queue 18–22, timeouts | More requests than the bus can handle (~17 reads/min at 4800 baud) | Lengthen the intervals (see README, section 6) | 12.10. |
+| Hot-water setpoint 5 instead of 55 °C after a restart | first value after start-up implausible | Filter: discard values outside 30–95 °C | 12.10. |
+| **Sammelstörung** (general fault) briefly "on" (2–17 min, ~20× a day), controller shows no fault | Read error of data point `0x0847`; cause open. Notable: "on" always came at the same second (:06), "off" always at a different one (:45) – with a single 120 s cycle there should be only one point in time. **Suspicion:** response of another data point wrongly assigned (unverified) | `delayed_on: 30min`; cross-check on the display while HA shows "Problem" | 13.10. |
 
 Another flashing error ("No more data to read" at 460800 baud) occurred on the **tank-level ESP32**, not on this
 device. If it occurs here: write the finished `firmware.factory.bin` with `esptool … --baud 115200`.
 
-## Expected failure patterns during commissioning (not yet occurred)
+## Checking the fault on the controller itself
+
+The red fault indicator lies **under the read head**. Instead (Vitotronic 200 KW2, service instructions pp. 39–40):
+
+| What | Buttons |
+|---|---|
+| current fault | **ⓘ**, scroll with **＋/－** (not OK – that acknowledges it) |
+| acknowledged faults | **OK** approx. 2 s |
+| fault history (last 10, **without date**) | **"Heizen und Warmwasser" (heating and hot water) + OK** approx. 2 s, scroll with ＋/－, OK ends; **✲ deletes all entries** |
+
+In the event of a fault, "Störung" (fault) also flashes on the display. Code **d1** = burner fault, **0F** = maintenance due (only in the history).
+
+## Further possible failure patterns (not occurred here)
 
 | Symptom | Possible cause | Check / solution |
 |---|---|---|
