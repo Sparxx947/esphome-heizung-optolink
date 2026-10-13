@@ -141,8 +141,8 @@ down. Corrected via `v_versatz_y = 0.9` in the SCAD.
 ### Addition: circulation sensor DS18B20 (since 13.10.)
 
 Plan for printing: [`plaene/ds18b20-zirkulation-plan.pdf`](plaene/ds18b20-zirkulation-plan.pdf)
-(generator [`plaene/ds18b20_plan.py`](plaene/ds18b20_plan.py)). Pin assignment of the read head on the ESP32:
-[`plaene/esp32-belegung.pdf`](plaene/esp32-belegung.pdf) (as of 12.10., without the sensor).
+(generator [`plaene/ds18b20_plan.py`](plaene/ds18b20_plan.py)). Pin assignment of read head and sensor on the ESP32:
+[`plaene/esp32-belegung.pdf`](plaene/esp32-belegung.pdf) (read head **and** sensor, as of 13.10.; generator [`plaene/esp32_belegung_plan.py`](plaene/esp32_belegung_plan.py)).
 
 | Sensor wire | ESP32 pin | Remark |
 |---|---|---|
@@ -344,7 +344,6 @@ The level measurement on the underground tank (pneumatic, its own ESP32) is a **
 | open | Clarify the meaning of "Betriebsart (Rohwert)" and "Raumtemperatur Soll" |
 | open | Read the controller's fault history via the Optolink (format not yet decoded) |
 | open | Holder for the head instead of adhesive tape |
-| optional | Add the DS18B20 to the pin assignment sheet |
 
 ---
 
@@ -367,7 +366,8 @@ The level measurement on the underground tank (pneumatic, its own ESP32) is a **
 | `plaene/optolink-schaltplan.pdf` | circuit diagram of the read head + connection table + position in the head (A4, SFH 309) |
 | `plaene/optolink_plan.svg` | the same as SVG |
 | `plaene/optolink_plan.py` | matplotlib script that generates the diagram |
-| `plaene/esp32-belegung.pdf` | connection sheet read head → ESP32 pin header (12.10.) |
+| `plaene/esp32-belegung.pdf` | Connection sheet read head + DS18B20 → ESP32 pin header (13.10.) |
+| `plaene/esp32_belegung_plan.py` | matplotlib script for it |
 | `plaene/ds18b20-zirkulation-plan.pdf` | soldering and connection plan of the circulation sensor (13.10.) |
 | `plaene/ds18b20_plan.py` | matplotlib script for it |
 | `.gitignore` | excludes secrets, build folders and backup copies |

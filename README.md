@@ -139,8 +139,8 @@ verschoben wurde. Korrigiert über `v_versatz_y = 0.9` im SCAD.
 ### Zusatz: Zirkulationsfühler DS18B20 (seit 13.10.)
 
 Plan zum Ausdrucken: [`plaene/ds18b20-zirkulation-plan.pdf`](plaene/ds18b20-zirkulation-plan.pdf)
-(Erzeuger [`plaene/ds18b20_plan.py`](plaene/ds18b20_plan.py)). Belegung des Lesekopfs am ESP32:
-[`plaene/esp32-belegung.pdf`](plaene/esp32-belegung.pdf) (Stand 12.10., ohne Fühler).
+(Erzeuger [`plaene/ds18b20_plan.py`](plaene/ds18b20_plan.py)). Belegung von Lesekopf und Fühler am ESP32:
+[`plaene/esp32-belegung.pdf`](plaene/esp32-belegung.pdf) (Lesekopf **und** Fühler, Stand 13.10.; Erzeuger [`plaene/esp32_belegung_plan.py`](plaene/esp32_belegung_plan.py)).
 
 | Fühlerader | ESP32-Pin | Bemerkung |
 |---|---|---|
@@ -342,7 +342,6 @@ Die Füllstandsmessung am Erdtank (pneumatisch, eigener ESP32) ist ein **eigenes
 | offen | Bedeutung von „Betriebsart (Rohwert)“ und „Raumtemperatur Soll“ klären |
 | offen | Fehlerhistorie der Regelung über den Optolink lesen (Format noch nicht dekodiert) |
 | offen | Halterung für den Kopf statt Klebeband |
-| optional | Belegungsblatt um den DS18B20 ergänzen |
 
 ---
 
@@ -364,7 +363,8 @@ Die Füllstandsmessung am Erdtank (pneumatisch, eigener ESP32) ist ein **eigenes
 | `plaene/optolink-schaltplan.pdf` | Schaltplan Lesekopf + Anschlusstabelle + Lage im Kopf (A4, SFH 309) |
 | `plaene/optolink_plan.svg` | dasselbe als SVG |
 | `plaene/optolink_plan.py` | matplotlib-Skript, das den Plan erzeugt |
-| `plaene/esp32-belegung.pdf` | Anschlussblatt Lesekopf → ESP32-Stiftleiste (12.10.) |
+| `plaene/esp32-belegung.pdf` | Anschlussblatt Lesekopf + DS18B20 → ESP32-Stiftleiste (13.10.) |
+| `plaene/esp32_belegung_plan.py` | matplotlib-Skript dazu |
 | `plaene/ds18b20-zirkulation-plan.pdf` | Löt- und Anschlussplan des Zirkulationsfühlers (13.10.) |
 | `plaene/ds18b20_plan.py` | matplotlib-Skript dazu |
 | `.gitignore` | schließt Secrets, Build-Ordner und Sicherungskopien aus |
