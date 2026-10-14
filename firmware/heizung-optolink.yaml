@@ -29,7 +29,7 @@ external_components:
     components: [optolink]
 
 logger:
-  level: INFO       # 12.10. nach Inbetriebnahme zurueck von DEBUG; UART0 bleibt frei fuer USB-Log
+  level: INFO       # 14.10. nach Debug-Mitschnitt zurueck auf INFO; UART0 bleibt frei fuer USB-Log
 
 api:
   encryption:
@@ -54,7 +54,7 @@ optolink:
   protocol: KW
   rx_pin: GPIO16
   tx_pin: GPIO17
-  logger: false     # 12.10.: Rohbytes aus (Inbetriebnahme abgeschlossen)
+  logger: false     # 14.10.: Rohbytes wieder aus (Debug-Mitschnitt abgeschlossen)
 
 text_sensor:
   - platform: debug
@@ -73,51 +73,127 @@ text_sensor:
     update_interval: 30s
 
 binary_sensor:
-  - platform: optolink
+  # 14.10.: FEHLMELDUNGEN GEKLAERT (Debug-Mitschnitt 17:34–18:24): Nach jeder Bus-Unterbrechung („communication disrupted –
+  #   suspending 20000 ms“, ~1×/min) liefert die ERSTE Anfrage nach „resuming communication“ das Sync-Byte 0x05 der Vitotronic
+  #   als Antwort (21 von 21 Faellen). Bei 1-Byte-Datenpunkten wird 0x05 als „an“ gelesen → Sammel-/Brennerstoerung, Brenner.
+  #   Abhilfe ohne Eingriff in die Komponente: Rohwert als 1-Byte-Sensor lesen, NUR 0 oder 1 uebernehmen, alles andere verwerfen
+  #   (letzter gueltiger Zustand bleibt). Entitaeten/Namen unveraendert. Rueckweg: heizung-optolink.yaml.vor-debug-20261014
+  - platform: template
+    id: bs_brennerstoerung
     name: Brennerstörung            # = Anzeige D1
-    address: 0x0883
     device_class: problem
-    update_interval: 120s  # 12.10. Busentlastung (vorher 15s)
-  - platform: optolink
+  - platform: template
+    id: bs_sammelstoerung
     name: Sammelstörung
-    address: 0x0847
     device_class: problem
-    update_interval: 120s  # 12.10. Busentlastung (vorher 15s)
     filters:
-      # 13.10.: meldete ~20x kurz „an“, waehrend die Regelung KEINE Stoerung zeigte (Display geprueft) →
-      # Lesefehler (laengster Fehlalarm 17 min); erst melden, wenn es 30 min anhaelt.
+      # 13.10.: meldete ~20x kurz „an“ (14.10. erklaert: Sync-Byte 0x05, jetzt oben verworfen); Verzoegerung bleibt als Reserve.
       - delayed_on: 30min
-  - platform: optolink
-    name: Brenner
-    address: 0x0842                 # Zustand 1. Stufe
+  - platform: template
+    id: bs_brenner
+    name: Brenner                   # Zustand 1. Stufe (0x0842)
     device_class: running
-    update_interval: 30s  # 12.10. Busentlastung (vorher 15s)
-  - platform: optolink
+  - platform: template
+    id: bs_speicherladepumpe
     name: Speicherladepumpe
-    address: 0x0845
     device_class: running
-    update_interval: 120s  # 12.10. Busentlastung (vorher 60s)
-  - platform: optolink
+  - platform: template
+    id: bs_zirkulationspumpe
     name: Zirkulationspumpe
-    address: 0x0846
     device_class: running
-    update_interval: 120s  # 12.10. Busentlastung (vorher 60s)
-  - platform: optolink
-    name: Heizkreispumpe
-    address: 0x2906                 # A1 (ohne Mischer) — 11.10. gelesen: 0
+  - platform: template
+    id: bs_heizkreispumpe
+    name: Heizkreispumpe            # A1 (ohne Mischer)
     device_class: running
-    update_interval: 1800s  # 12.10. Busentlastung (vorher 60s)
-  - platform: optolink
+  - platform: template
+    id: bs_heizkreispumpe_m2
     name: Heizkreispumpe M2
-    address: 0x3906                 # 11.10. gelesen: 1 (an) — 0x080C ist laut vcontrold Vorlauf M2
     device_class: running
-    update_interval: 120s  # 12.10. Busentlastung (vorher 60s)
 
 one_wire:
   - platform: gpio
     pin: GPIO4               # 13.10.: DS18B20 Zirkulation, Pull-up 4,7 kΩ am Kabel
 
 sensor:
+  # --- Rohwerte der Schaltzustaende (14.10.): nur 0/1 gilt, 0x05 = Sync-Byte nach Bus-Unterbrechung → verwerfen ---
+  - platform: optolink
+    id: roh_brennerstoerung
+    internal: true
+    address: 0x0883
+    bytes: 1
+    accuracy_decimals: 0
+    update_interval: 120s
+    on_value:
+      - lambda: |-
+          if (x == 0.0f || x == 1.0f) id(bs_brennerstoerung).publish_state(x == 1.0f);
+          else ESP_LOGW("optolink_filter", "0x0883: Rohwert %.0f verworfen (Sync-Byte?)", x);
+  - platform: optolink
+    id: roh_sammelstoerung
+    internal: true
+    address: 0x0847
+    bytes: 1
+    accuracy_decimals: 0
+    update_interval: 120s
+    on_value:
+      - lambda: |-
+          if (x == 0.0f || x == 1.0f) id(bs_sammelstoerung).publish_state(x == 1.0f);
+          else ESP_LOGW("optolink_filter", "0x0847: Rohwert %.0f verworfen (Sync-Byte?)", x);
+  - platform: optolink
+    id: roh_brenner
+    internal: true
+    address: 0x0842
+    bytes: 1
+    accuracy_decimals: 0
+    update_interval: 30s
+    on_value:
+      - lambda: |-
+          if (x == 0.0f || x == 1.0f) id(bs_brenner).publish_state(x == 1.0f);
+          else ESP_LOGW("optolink_filter", "0x0842: Rohwert %.0f verworfen (Sync-Byte?)", x);
+  - platform: optolink
+    id: roh_speicherladepumpe
+    internal: true
+    address: 0x0845
+    bytes: 1
+    accuracy_decimals: 0
+    update_interval: 120s
+    on_value:
+      - lambda: |-
+          if (x == 0.0f || x == 1.0f) id(bs_speicherladepumpe).publish_state(x == 1.0f);
+          else ESP_LOGW("optolink_filter", "0x0845: Rohwert %.0f verworfen (Sync-Byte?)", x);
+  - platform: optolink
+    id: roh_zirkulationspumpe
+    internal: true
+    address: 0x0846
+    bytes: 1
+    accuracy_decimals: 0
+    update_interval: 120s
+    on_value:
+      - lambda: |-
+          if (x == 0.0f || x == 1.0f) id(bs_zirkulationspumpe).publish_state(x == 1.0f);
+          else ESP_LOGW("optolink_filter", "0x0846: Rohwert %.0f verworfen (Sync-Byte?)", x);
+  - platform: optolink
+    id: roh_heizkreispumpe
+    internal: true
+    address: 0x2906
+    bytes: 1
+    accuracy_decimals: 0
+    update_interval: 1800s
+    on_value:
+      - lambda: |-
+          if (x == 0.0f || x == 1.0f) id(bs_heizkreispumpe).publish_state(x == 1.0f);
+          else ESP_LOGW("optolink_filter", "0x2906: Rohwert %.0f verworfen (Sync-Byte?)", x);
+  - platform: optolink
+    id: roh_heizkreispumpe_m2
+    internal: true
+    address: 0x3906
+    bytes: 1
+    accuracy_decimals: 0
+    update_interval: 120s
+    on_value:
+      - lambda: |-
+          if (x == 0.0f || x == 1.0f) id(bs_heizkreispumpe_m2).publish_state(x == 1.0f);
+          else ESP_LOGW("optolink_filter", "0x3906: Rohwert %.0f verworfen (Sync-Byte?)", x);
+
   # --- Temperaturen ---
   - platform: dallas_temp
     name: Zirkulation Rücklauf
@@ -264,6 +340,10 @@ sensor:
     entity_category: diagnostic
     accuracy_decimals: 0
     update_interval: 600s
+    filters:
+      - lambda: |-   # 14.10.: gueltig 0–4; 5 = Sync-Byte nach Bus-Unterbrechung (14.10. 18:04 gesehen)
+          if (x > 4.0f) return {};
+          return x;
   - platform: optolink
     name: Raumtemperatur Soll
     address: 0x2306
@@ -273,6 +353,10 @@ sensor:
     accuracy_decimals: 0
     entity_category: diagnostic
     update_interval: 600s
+    filters:
+      - lambda: |-   # 14.10.: Sync-Byte 0x05 nach Bus-Unterbrechung verwerfen
+          if (x < 10.0f || x > 30.0f) return {};
+          return x;
 
   # --- ESP selbst ---
   - platform: optolink
