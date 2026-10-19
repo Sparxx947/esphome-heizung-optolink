@@ -21,6 +21,7 @@
 | Hot-water setpoint 5 instead of 55 °C after a restart | first value after start-up implausible | Filter: discard values outside 30–95 °C | 12.10. |
 | **Sammelstörung** (general fault) briefly "on" (2–17 min, ~20× a day), controller shows no fault | **Resolved 14.10. (debug capture):** after every bus suspension ("communication disrupted – suspending … 20000 ms", ~1/min) the **first request after "resuming communication"** returns the Vitotronic **sync byte 0x05** as payload for 1-byte data points (21 of 21 cases); 0x05 ≠ 0 is read as "on" | read switch states as internal 1-byte sensors and **only accept 0/1** (template binary_sensor, same entity IDs); `delayed_on: 30min` kept as a reserve | 13./14.10. |
 | **Brennerstörung** (burner fault) "on" for 4 min (13.10. 18:07–18:11), burner was running, controller shows no fault | the same false reading as with the general fault, now at `0x0883` | Alarm with plausibility check (README, section 8). **Lesson:** the boiler temperature is no proof of a flame – with the burner running under load it fell from 80.8 to 71.7 °C in 5 min. Proof is the rising burner hours | 13.10. |
+| **Heating curve slope** jumps between 1.4 and 0.5 | sync byte 0x05 after a bus suspension, read as 0.5 because of the `÷ 10` | filter discards 0.5 (a slope genuinely set to 0.5 would no longer be visible) | 19.10. |
 
 Another flashing error ("No more data to read" at 460800 baud) occurred on the **tank-level ESP32**, not on this
 device. If it occurs here: write the finished `firmware.factory.bin` with `esptool … --baud 115200`.
