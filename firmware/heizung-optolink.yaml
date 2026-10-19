@@ -324,6 +324,10 @@ sensor:
     accuracy_decimals: 1
     entity_category: diagnostic
     update_interval: 1800s
+    filters:
+      - lambda: |-   # 19.10.: Rohbyte 0x05 (= 0,5) ist das Sync-Byte nach Bus-Unterbrechung (15.–18.10. 20x neben 1,4); echte Neigung 0,5 wuerde mitverworfen
+          if (x > 0.45f && x < 0.55f) return {};
+          return x;
   - platform: optolink
     name: Heizkurve Niveau
     address: 0x2304                 # 11.10. gelesen: 0 (M2 0x3304 identisch)
