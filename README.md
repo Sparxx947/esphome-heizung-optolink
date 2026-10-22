@@ -4,7 +4,9 @@
 
 Selbstbau-Lesekopf an der Optolink-Schnittstelle einer Viessmann-Ölheizung. Ein ESP32 mit ESPHome
 liest Temperaturen, Brennerzustand, Brennerstunden und **Störmeldungen** aus der Regelung und gibt sie an
-Home Assistant weiter. **Bewusst nur lesend** – die Firmware enthält nichts, was in die Regelung schreibt.
+Home Assistant weiter. **Bis zum 22.10.2026 bewusst nur lesend.** Seitdem schreibt die Firmware **genau einen**
+Wert: das normale Raumsoll des Heizkreises 2 (`0x3306`, 18–28 °C) – mit Rückmeldung über einen eigenen Lese-Sensor
+(siehe Abschnitt 8).
 
 > Stand dieser Dokumentation: **13.10.2026**. **In Betrieb seit 12.10.2026**: Der Lesekopf sitzt an der Regelung,
 > der ESP32 liest alle Werte und gibt sie an Home Assistant. Seit 13.10. misst ein zusätzlicher **DS18B20** die
@@ -24,7 +26,7 @@ Home Assistant weiter. **Bewusst nur lesend** – die Firmware enthält nichts, 
 | **Anlage** | Ölkessel Viessmann **Vitola 111** (mit integriertem Speicher), Regelung **Vitotronic 200 Typ KW2** (witterungsgeführt, Gerätekennung `0x2098`), Brenner Viessmann VEA I-2 (Bj. 1999, max. 2,0 kg/h ≈ 2,4 l/h) |
 | **Einbauort** | Heizungskeller, Lesekopf vorn links am „V“ der Regelung, ESP-Gehäuse magnetisch am Kesselblech |
 | **Was gemessen wird** | Brennerstörung (Anzeige **D1**), Sammelstörung, Brennerfreigabe, Pumpen, Außen-/Kessel-/Warmwasser-/Vorlauftemperaturen, Kessel- und Warmwasser-Sollwert, Heizkurve, Brennerstarts, **Brennerstunden**; dazu per DS18B20 die **Zirkulation (Rücklauf)** |
-| **Was gesteuert wird** | nichts (absichtlich) |
+| **Was gesteuert wird** | seit 22.10.2026 nur das **Raumsoll Heizkreis 2** (`0x3306`, 18–28 °C, ganze Grad); sonst nichts (absichtlich) |
 | **Ziel** | Push bei Brennerstörung (Anlass: Störung D1 am 03./04.10.2026 bei leerem Tank, die niemand bemerkt hat); Ölverbrauch aus Brennerstunden × Düsendurchsatz als Grundlage für eine Tankprognose |
 
 **Prinzip:** Die Vitotronic hat vorn hinter einem „V“-förmigen Ausschnitt zwei Lämpchen – eine IR-Empfangsdiode
@@ -51,6 +53,7 @@ empfängt von der rechten. Der ESP32 bedient beide über einen UART (RX GPIO16 /
 | HA: Startverzögerung + Startalarm | ✅ aktiv | 12.10. – Push, wenn der Brenner 45 min nach der Freigabe nicht startet |
 | Zirkulationsfühler DS18B20 | ✅ in Betrieb | 13.10. – GPIO4, erster Wert 46,6 °C bei laufender Pumpe |
 | Sammelstörung | ⚠️ mit Filter | 13.10. – meldete ~20× kurz „an“ ohne Störung an der Regelung; meldet jetzt erst nach 30 min |
+| Raumsoll HK2 schreiben | ✅ am Display bestätigt, ⚠️ ohne Quittung | 22.10. – 26 geschrieben und am Display abgelesen, zurück auf 25 ebenso. Ein zweiter Befehl ging bei einer Busunterbrechung **still verloren** → HA-Skript liest zurück und wiederholt |
 
 ---
 
@@ -213,7 +216,7 @@ Datei: [`firmware/heizung-optolink.yaml`](firmware/heizung-optolink.yaml) – en
 | OTA | `platform: esphome`, ohne eigenes Passwort (abgesichert über den API-Schlüssel) |
 | Fallback-Hotspot | SSID `Heizung-Fallback`, Passwort aus Secret, mit Captive Portal |
 
-### Entitäten in Home Assistant (29)
+### Entitäten in Home Assistant (31)
 
 Gerät „Heizung“ in der ESPHome-Integration, Entity-IDs `sensor.heizung_…` / `binary_sensor.heizung_…`
 (z. B. `sensor.heizung_brennerstunden`, `sensor.heizung_zirkulation_rucklauf`). Einige später ergänzte Entitäten
@@ -243,7 +246,9 @@ bekamen von HA das Präfix des Bereichs (`…heizungskeller_heizung_…`).
 | Heizkurve Neigung | Diagnose | `0x2305` | 1 B ÷ 10 | 1800 s | ✅ (1,4) |
 | Heizkurve Niveau | K, Diagnose | `0x2304` | 1 B, vorzeichenbehaftet | 1800 s | ✅ (0) |
 | Betriebsart (Rohwert) | Diagnose | `0x2301` | 1 B | 600 s | Zuordnung offen |
-| Raumtemperatur Soll | °C, Diagnose | `0x2306` | 1 B | 600 s | unplausibel – Zuordnung offen |
+| Raumtemperatur Soll | °C, Diagnose | `0x2306` | 1 B | 600 s | Heizkreis 1 – an dieser Anlage „Ohne Funktion“, Wert ohne Wirkung |
+| Raumsoll HK2 | °C | `0x3306` | 1 B, Filter 3–37 °C, ohne 5 | 300 s | ✅ 22.10. – Heizkreis 2 (Mischer M2), entspricht ☀ bei Taste 2 am Display |
+| Raumsoll HK2 einstellen | **number (schreibend)**, Box | `0x3306` | 1 B, 18–28 °C, Schritt 1 | 1800 s | ✅ 22.10. – zeigt nach dem Schreiben den **gesendeten** Wert, auch wenn er nicht ankam |
 | Optolink-Warteschlange | Diagnose | – | `QUEUE_SIZE` | 60 s | |
 | Gerätekennung | Text, Diagnose | – | `DEVICE_INFO` | 1800 s | ✅ `Device ID: 2098` |
 | Optolink-Status | Text, Diagnose | – | `STATE_INFO` | 30 s | |
@@ -309,6 +314,7 @@ Ausführlich in eigenen Dateien:
 ## 8. Home-Assistant-Anbindung
 
 Im Repo liegen **keine HA-Pakete** – alles ist in der HA-Oberfläche angelegt (UI-Helfer und -Automationen).
+Ausnahme: das Skript zum Schreiben des Raumsolls, [`ha/heizung-raumsoll-hk2.yaml`](ha/heizung-raumsoll-hk2.yaml).
 
 | Vorhaben | Umsetzung | Status |
 |---|---|---|
@@ -318,6 +324,13 @@ Im Repo liegen **keine HA-Pakete** – alles ist in der HA-Oberfläche angelegt 
 | **Startverzögerung** | Freigabe (`0x0842` an) stempelt die Zeit, der nächste Anstieg der Brennerstarts schreibt die Wartezeit in `input_number` | ✅ aktiv |
 | **Startalarm** | Freigabe seit 45 min, aber kein Start → Push „Brenner startet nicht“; startet er später doch → Entwarnung | ✅ aktiv, Selbsttest läuft beim nächsten Brennerstart |
 | Tankprognose / Warnung | über die separate pneumatische Tankmessung | ✅ dort umgesetzt |
+| **Raumsoll HK2 setzen** | Skript `heizung_raumsoll_hk2_setzen` (Feld 18–28 °C): schreibt über die number-Entität, wartet bis 11 min, bis der **Lese-Sensor** den Wert meldet, sonst bis zu 3 Versuche; danach Push ✅ oder ⚠️ | ✅ aktiv seit 22.10. |
+
+**Schreiben ohne Quittung (22.10.):** Das KW-Protokoll hat keine Prüfsumme, und die ESPHome-number übernimmt den
+gesendeten Wert sofort als Zustand. Trifft eine Busunterbrechung („communication disrupted“, 20 s Pause) den
+Schreibbefehl, geht er **still verloren** – so am 22.10.: Entität 26, Regelung und Display 25. Belegt ist ein
+Schreiben nur durch das Zurücklesen (Sensor „Raumsoll HK2“) oder das Display. Einzelne Lesungen fallen nach solchen
+Unterbrechungen ebenfalls aus (Sync-Byte 5, wird verworfen), deshalb wartet das Skript mehrere Lesezyklen.
 
 **Erkenntnis 12.10.:** `0x0842` („Brenner“) ist die **Freigabe** durch die Regelung, nicht die Flamme. Zwischen
 Freigabe und tatsächlichem Start vergehen an dieser Anlage 1–25 min (Ursache ungeprüft, vermutlich Ölvorwärmung).
@@ -339,7 +352,8 @@ Die Füllstandsmessung am Erdtank (pneumatisch, eigener ESP32) ist ein **eigenes
 | 15.–18.10.2026 | Vergleichstest: Startverzögerung mit stark verringerten Optolink-Abfragen – belastet der Bus die Regelung? |
 | 02.11.2026 | Düsendurchsatz gegen die Tankmessung eichen (Wochensummen, Lieferungen herausrechnen) |
 | offen | Sammelstörung: Ursache der Fehlmeldungen klären (Verdacht: Antwort eines anderen Datenpunkts falsch zugeordnet) |
-| offen | Bedeutung von „Betriebsart (Rohwert)“ und „Raumtemperatur Soll“ klären |
+| offen | Bedeutung von „Betriebsart (Rohwert)“ klären |
+| offen | Ursache der Busunterbrechungen (4–5 je 30 min am 22.10., 47 je 50 min am 14.10.) – sie lassen auch Schreibbefehle verloren gehen |
 | offen | Fehlerhistorie der Regelung über den Optolink lesen (Format noch nicht dekodiert) |
 | offen | Halterung für den Kopf statt Klebeband |
 
@@ -356,6 +370,7 @@ Die Füllstandsmessung am Erdtank (pneumatisch, eigener ESP32) ist ein **eigenes
 | `docs/verlauf.md` | Projektverlauf mit Datum |
 | `firmware/heizung-optolink.yaml` | ESPHome-Konfiguration (Stand Builder) |
 | `firmware/secrets.example.yaml` | Vorlage für die Secrets (ohne echte Werte) |
+| `ha/heizung-raumsoll-hk2.yaml` | HA-Skript: Raumsoll HK2 schreiben, zurücklesen, bis zu 3 Versuche |
 | `gehaeuse/optolink-gehaeuse.scad` | OpenSCAD-Quelltext aller Gehäuseteile |
 | `gehaeuse/kopf.stl`, `kopf_deckel.stl`, `v_schluessel.stl` | Lesekopf mit Deckel und Führungs-V (Kopf Stand 11.10.) |
 | `gehaeuse/esp.stl`, `esp_deckel.stl` | ESP32-Gehäuse mit Deckel |

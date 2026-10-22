@@ -4,7 +4,9 @@
 
 DIY read head on the Optolink interface of a Viessmann oil-fired boiler. An ESP32 running ESPHome
 reads temperatures, burner state, burner hours and **fault messages** from the controller and passes them on to
-Home Assistant. **Deliberately read-only** – the firmware contains nothing that writes to the controller.
+Home Assistant. **Deliberately read-only until 22.10.2026.** Since then the firmware writes **exactly one** value:
+the normal room setpoint of heating circuit 2 (`0x3306`, 18–28 °C) – with a read-back via a separate sensor
+(see section 8).
 
 > State of this documentation: **13.10.2026**. **In operation since 12.10.2026**: the read head sits on the controller,
 > the ESP32 reads all values and passes them on to Home Assistant. Since 13.10. an additional **DS18B20** measures the
@@ -24,7 +26,7 @@ Home Assistant. **Deliberately read-only** – the firmware contains nothing tha
 | **System** | Oil boiler Viessmann **Vitola 111** (with integrated hot-water tank), controller **Vitotronic 200 type KW2** (weather-compensated, device ID `0x2098`), burner Viessmann VEA I-2 (built 1999, max. 2.0 kg/h ≈ 2.4 l/h) |
 | **Location** | Boiler room in the basement, read head at the front left on the "V" of the controller, ESP enclosure magnetically attached to the boiler sheet metal |
 | **What is measured** | Burner fault (display **D1**), general fault, burner enable signal, pumps, outdoor/boiler/hot-water/flow temperatures, boiler and hot-water setpoint, heating curve, burner starts, **burner hours**; plus, via DS18B20, the **circulation (return)** |
-| **What is controlled** | nothing (on purpose) |
+| **What is controlled** | since 22.10.2026 only the **room setpoint of heating circuit 2** (`0x3306`, 18–28 °C, whole degrees); nothing else (on purpose) |
 | **Goal** | Push notification on burner fault (trigger: fault D1 on 03./04.10.2026 with an empty tank, which nobody noticed); oil consumption from burner hours × nozzle throughput as the basis for a tank forecast |
 
 **Principle:** Behind a "V"-shaped cut-out at the front, the Vitotronic has two small lamps – an IR receiving diode
@@ -51,6 +53,7 @@ receives from the right one. The ESP32 drives both via a UART (RX GPIO16 / TX GP
 | HA: start delay + start alarm | ✅ active | 12.10. – push if the burner has not started 45 min after the enable signal |
 | Circulation sensor DS18B20 | ✅ in operation | 13.10. – GPIO4, first value 46.6 °C with the pump running |
 | General fault | ⚠️ with filter | 13.10. – reported "on" briefly ~20× without a fault at the controller; now only reports after 30 min |
+| Writing room setpoint HC2 | ✅ confirmed at the display, ⚠️ no acknowledgement | 22.10. – 26 written and read at the display, back to 25 likewise. A second command was **lost silently** during a bus suspension → the HA script reads back and retries |
 
 ---
 
@@ -215,7 +218,7 @@ File: [`firmware/heizung-optolink.yaml`](firmware/heizung-optolink.yaml) – mat
 | OTA | `platform: esphome`, without its own password (secured via the API key) |
 | Fallback hotspot | SSID `Heizung-Fallback`, password from secret, with captive portal |
 
-### Entities in Home Assistant (29)
+### Entities in Home Assistant (31)
 
 Device "Heizung" (heating) in the ESPHome integration, entity IDs `sensor.heizung_…` / `binary_sensor.heizung_…`
 (e.g. `sensor.heizung_brennerstunden`, `sensor.heizung_zirkulation_rucklauf`). Some entities added later
@@ -245,7 +248,9 @@ were given the area prefix by HA (`…heizungskeller_heizung_…`).
 | Heizkurve Neigung (heating curve slope) | diagnostic | `0x2305` | 1 B ÷ 10 | 1800 s | ✅ (1.4) |
 | Heizkurve Niveau (heating curve level) | K, diagnostic | `0x2304` | 1 B, signed | 1800 s | ✅ (0) |
 | Betriebsart (Rohwert) (operating mode, raw value) | diagnostic | `0x2301` | 1 B | 600 s | mapping open |
-| Raumtemperatur Soll (room temperature setpoint) | °C, diagnostic | `0x2306` | 1 B | 600 s | implausible – mapping open |
+| Raumtemperatur Soll (room temperature setpoint) | °C, diagnostic | `0x2306` | 1 B | 600 s | heating circuit 1 – "no function" on this installation, value has no effect |
+| Raumsoll HK2 (room setpoint HC2) | °C | `0x3306` | 1 B, filter 3–37 °C, without 5 | 300 s | ✅ 22.10. – heating circuit 2 (mixer M2), matches ☀ under button 2 on the display |
+| Raumsoll HK2 einstellen (set room setpoint HC2) | **number (writing)**, box | `0x3306` | 1 B, 18–28 °C, step 1 | 1800 s | ✅ 22.10. – after writing it shows the **sent** value, even if it did not arrive |
 | Optolink-Warteschlange (Optolink queue) | diagnostic | – | `QUEUE_SIZE` | 60 s | |
 | Gerätekennung (device ID) | text, diagnostic | – | `DEVICE_INFO` | 1800 s | ✅ `Device ID: 2098` |
 | Optolink-Status (Optolink status) | text, diagnostic | – | `STATE_INFO` | 30 s | |
@@ -311,6 +316,7 @@ In detail in separate files:
 ## 8. Home Assistant integration
 
 The repo contains **no HA packages** – everything has been created in the HA user interface (UI helpers and automations).
+Exception: the script that writes the room setpoint, [`ha/heizung-raumsoll-hk2.yaml`](ha/heizung-raumsoll-hk2.yaml).
 
 | Plan | Implementation | Status |
 |---|---|---|
@@ -320,6 +326,13 @@ The repo contains **no HA packages** – everything has been created in the HA u
 | **Start delay** | Enable signal (`0x0842` on) stamps the time, the next increase of the burner starts writes the waiting time into an `input_number` | ✅ active |
 | **Start alarm** | Enable signal for 45 min, but no start → push "Brenner startet nicht" (burner does not start); if it does start later → all-clear | ✅ active, self-test runs at the next burner start |
 | Tank forecast / warning | via the separate pneumatic tank measurement | ✅ implemented there |
+| **Set room setpoint HC2** | Script `heizung_raumsoll_hk2_setzen` (field 18–28 °C): writes via the number entity, waits up to 11 min for the **read sensor** to report the value, otherwise up to 3 attempts; then push ✅ or ⚠️ | ✅ active since 22.10. |
+
+**Writing without acknowledgement (22.10.):** The KW protocol has no checksum, and the ESPHome number adopts the
+sent value as its state immediately. If a bus suspension ("communication disrupted", 20 s pause) hits the write
+command, it is **lost silently** – as on 22.10.: entity 26, controller and display 25. A write is only proven by
+reading back (sensor "Raumsoll HK2") or the display. Single reads also fail after such suspensions (sync byte 5,
+discarded), which is why the script waits several read cycles.
 
 **Finding 12.10.:** `0x0842` ("Brenner") is the **enable signal** from the controller, not the flame. Between
 enable signal and actual start, 1–25 min pass on this system (cause unverified, presumably oil preheating).
@@ -341,7 +354,8 @@ The level measurement on the underground tank (pneumatic, its own ESP32) is a **
 | 15.–18.10.2026 | Comparison test: start delay with greatly reduced Optolink polling – does the bus load the controller? |
 | 02.11.2026 | Calibrate the nozzle throughput against the tank measurement (weekly totals, deliveries subtracted) |
 | open | General fault: clarify the cause of the false reports (suspicion: response of another data point wrongly assigned) |
-| open | Clarify the meaning of "Betriebsart (Rohwert)" and "Raumtemperatur Soll" |
+| open | Clarify the meaning of "Betriebsart (Rohwert)" |
+| open | Cause of the bus suspensions (4–5 per 30 min on 22.10., 47 per 50 min on 14.10.) – they also make write commands get lost |
 | open | Read the controller's fault history via the Optolink (format not yet decoded) |
 | open | Holder for the head instead of adhesive tape |
 
@@ -359,6 +373,7 @@ The level measurement on the underground tank (pneumatic, its own ESP32) is a **
 | `docs/*.en.md` | English versions of the docs |
 | `firmware/heizung-optolink.yaml` | ESPHome configuration (Builder state) |
 | `firmware/secrets.example.yaml` | template for the secrets (without real values) |
+| `ha/heizung-raumsoll-hk2.yaml` | HA script: write room setpoint HC2, read back, up to 3 attempts |
 | `gehaeuse/optolink-gehaeuse.scad` | OpenSCAD source of all enclosure parts |
 | `gehaeuse/kopf.stl`, `kopf_deckel.stl`, `v_schluessel.stl` | read head with lid and guide V (head as of 11.10.) |
 | `gehaeuse/esp.stl`, `esp_deckel.stl` | ESP32 enclosure with lid |
