@@ -7,7 +7,11 @@
 #   Schaltung nach VitoWiFi/openv-Wiki („Die Optolink-Schnittstelle“, „ESPHome-Optolink“).
 # Komponente: ESPHome-PR #4453 (j0ta29, Stand 17.09.2026), Protokoll KW (VS1), 4800 8E2.
 # Adressen: openv-Wiki „Adressen“, Spalte V200KW2/KW1.
-# Bewusst NUR LESEND — keine number/select/switch, die in die Regelung schreiben.
+# Bis 22.10.2026 bewusst NUR LESEND. Seit Variante „raumsoll-schreiben“ (22.10.) GENAU EIN
+#   schreibender Datenpunkt: number „Raumsoll HK2 einstellen“ (0x3306, 18–28 °C, ganze Grad).
+#   KW-Protokoll hat KEINE Pruefsumme → nach jedem Schreiben Rueckmeldung ueber den
+#   Lese-Sensor „Raumsoll HK2“ pruefen (HA-Skript heizung_raumsoll_hk2_setzen).
+#   Rueckweg: heizung-optolink.yaml.vor-raumsoll-schreiben-20261022
 # Stand 04.10.2026, Notiz project_oeltank_fuellstandsensor.
 
 substitutions:
@@ -17,7 +21,7 @@ substitutions:
 esphome:
   name: ${name}
   friendly_name: ${friendly_name}
-  comment: Vitotronic 200 KW2 per Optolink (nur lesend)
+  comment: Vitotronic 200 KW2 per Optolink (lesend + Raumsoll HK2)
 
 esp32:
   board: esp32dev
@@ -361,6 +365,19 @@ sensor:
       - lambda: |-   # 14.10.: Sync-Byte 0x05 nach Bus-Unterbrechung verwerfen
           if (x < 10.0f || x > 30.0f) return {};
           return x;
+  - platform: optolink
+    name: Raumsoll HK2              # 22.10.: Mischerkreis M2 = einziger belegter Heizkreis (HK1 „Ohne Funktion“)
+    id: raumsoll_hk2
+    address: 0x3306                 # 11.10. gelesen 37, 17.10. am Display 37 → 25 bestaetigt
+    bytes: 1
+    unit_of_measurement: °C
+    device_class: temperature
+    accuracy_decimals: 0
+    update_interval: 300s
+    filters:
+      - lambda: |-   # Bereich der KW2 3–37 °C; 5 = Sync-Byte nach Bus-Unterbrechung (wie 0x2305/0x2301)
+          if (x < 3.0f || x > 37.0f || x == 5.0f) return {};
+          return x;
 
   # --- ESP selbst ---
   - platform: optolink
@@ -374,3 +391,20 @@ sensor:
   - platform: uptime
     name: Laufzeit
     update_interval: 600s
+
+number:
+  # 22.10.2026: einziger SCHREIBENDER Datenpunkt. Bereich bewusst eng (18–28): ein Tippfehler
+  # oder ein verrutschter Regler kann den Kessel weder auskuehlen noch auf 37 °C treiben.
+  # Die Komponente liest den Wert auch selbst zurueck (ohne Filter — Sync-Byte 5 kann kurz
+  # angezeigt werden); massgeblich fuer die Rueckmeldung ist der Sensor „Raumsoll HK2“.
+  - platform: optolink
+    name: Raumsoll HK2 einstellen
+    address: 0x3306
+    bytes: 1
+    min_value: 18
+    max_value: 28
+    step: 1
+    mode: box
+    unit_of_measurement: °C
+    icon: mdi:thermostat
+    update_interval: 1800s

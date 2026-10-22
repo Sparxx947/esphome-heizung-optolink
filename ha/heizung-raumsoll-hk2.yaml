@@ -1,0 +1,68 @@
+# HA-Skript: Raumsoll HK2 der Vitotronic 200 KW2 per Optolink setzen und Rueckmeldung pruefen.
+# Eingespielt 22.10.2026; Fassung 2 (22.10. 09:20) mit bis zu 3 Schreibversuchen — ein Befehl ging
+# bei einer Busunterbrechung still verloren (number zeigte 26, Display blieb 25).
+#   number.heizungskeller_heizung_raumsoll_hk2_einstellen  — schreibt 0x3306 (18–28 °C)
+#   sensor.heizungskeller_heizung_raumsoll_hk2             — liest 0x3306 alle 300 s, Sync-Byte gefiltert
+# Warum die Rueckmeldung: Das KW-Protokoll hat keine Pruefsumme. Ob der Wert angekommen ist,
+# belegt nur das Zuruecklesen (und am Ende das Display: ☀ bei Taste 2).
+# Einspielen: Einstellungen → Automationen & Szenen → Skripte → Neues Skript → „In YAML bearbeiten“,
+# Inhalt ab „alias:“ einfuegen, Skript-ID heizung_raumsoll_hk2_setzen; notify-Dienst anpassen.
+
+alias: "Heizung: Raumsoll HK2 setzen (mit Rueckmeldung)"
+description: >-
+  Schreibt die normale Raumtemperatur des Heizkreises 2 (Mischer M2, einziger belegter Kreis)
+  per Optolink; bis zu 3 Versuche, je bis 11 min warten, bis der Lese-Sensor den Wert zurueckmeldet.
+  Erfolg und Fehlschlag gehen als Push aufs Handy.
+mode: single
+fields:
+  soll:
+    name: Raumsoll
+    description: Normale Raumtemperatur HK2 in °C (ganze Grad)
+    required: true
+    selector:
+      number:
+        min: 18
+        max: 28
+        step: 1
+        unit_of_measurement: °C
+sequence:
+  - variables:
+      vorher: "{{ states('sensor.heizungskeller_heizung_raumsoll_hk2') }}"
+      ziel: "{{ soll | int }}"
+  - repeat:
+      sequence:
+        - action: number.set_value
+          target:
+            entity_id: number.heizungskeller_heizung_raumsoll_hk2_einstellen
+          data:
+            value: "{{ ziel }}"
+        # 11 min = mindestens zwei Lesezyklen (300 s); einzelne Lesungen fallen bei
+        # Busunterbrechungen aus (Sync-Byte 5 wird verworfen).
+        - wait_template: "{{ states('sensor.heizungskeller_heizung_raumsoll_hk2') | int(-1) == ziel }}"
+          timeout:
+            minutes: 11
+          continue_on_timeout: true
+        - variables:
+            versuche: "{{ repeat.index }}"
+      until:
+        - condition: template
+          value_template: "{{ wait.completed or repeat.index >= 3 }}"
+  - if:
+      - condition: template
+        value_template: "{{ states('sensor.heizungskeller_heizung_raumsoll_hk2') | int(-1) == ziel }}"
+    then:
+      - action: notify.mobile_app_dein_handy
+        data:
+          title: "✅ Heizung: Raumsoll HK2 = {{ ziel }} °C"
+          message: >-
+            Per Optolink geschrieben und zurueckgelesen (vorher {{ vorher }} °C,
+            Versuche: {{ versuche | default('?') }}).
+    else:
+      - action: notify.mobile_app_dein_handy
+        data:
+          title: "⚠️ Heizung: Raumsoll HK2 NICHT bestaetigt"
+          message: >-
+            3 Schreibversuche auf {{ ziel }} °C, Lese-Sensor meldet
+            {{ states('sensor.heizungskeller_heizung_raumsoll_hk2') }} °C (vorher {{ vorher }} °C).
+            Optolink-Status: {{ states('sensor.heizung_optolink_status') }}.
+            Bitte am Display pruefen (Taste 2, dann ☀).
