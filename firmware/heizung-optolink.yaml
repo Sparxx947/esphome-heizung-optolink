@@ -322,7 +322,7 @@ sensor:
   # --- Einstellungen (nur anzeigen) ---
   - platform: optolink
     name: Heizkurve Neigung
-    address: 0x2305                 # 11.10. gelesen: 14 → 1,4 (M2 0x3305 identisch)
+    address: 0x3305                 # 22.10.: M2 (belegter Kreis); bis dahin 0x2305 = HK1 „Ohne Funktion“ (11.10. beide 1,4)
     bytes: 1
     div_ratio: 10
     accuracy_decimals: 1
@@ -334,7 +334,7 @@ sensor:
           return x;
   - platform: optolink
     name: Heizkurve Niveau
-    address: 0x2304                 # 11.10. gelesen: 0 (M2 0x3304 identisch)
+    address: 0x3304                 # 22.10.: M2; bis dahin 0x2304 = HK1 (11.10. beide 0)
     bytes: 1
     min_value: -13                  # vorzeichenbehaftet
     unit_of_measurement: K
@@ -343,7 +343,7 @@ sensor:
     update_interval: 1800s
   - platform: optolink
     name: Betriebsart (Rohwert)
-    address: 0x2301
+    address: 0x3301                 # 22.10.: M2; bis dahin 0x2301 = HK1
     bytes: 1
     entity_category: diagnostic
     accuracy_decimals: 0

@@ -245,9 +245,9 @@ were given the area prefix by HA (`…heizungskeller_heizung_…`).
 | Brennerstarts (burner starts) | counter | `0x088A` | 4 B | 60 s | ✅ |
 | Brennerstunden (Stufe 1) (burner hours, stage 1) | h, total_increasing | `0x08A7` | 4 B, seconds ÷ 3600 | 60 s | ✅ |
 | Ölverbrauch Regelung (oil consumption, controller) | diagnostic | `0x7574` | 4 B ÷ 1000 | 1800 s | always 0 – not kept by this KW2 |
-| Heizkurve Neigung (heating curve slope) | diagnostic | `0x2305` | 1 B ÷ 10 | 1800 s | ✅ (1.4) |
-| Heizkurve Niveau (heating curve level) | K, diagnostic | `0x2304` | 1 B, signed | 1800 s | ✅ (0) |
-| Betriebsart (Rohwert) (operating mode, raw value) | diagnostic | `0x2301` | 1 B | 600 s | mapping open |
+| Heizkurve Neigung (heating curve slope) | diagnostic | `0x3305` | 1 B ÷ 10 | 1800 s | ✅ (1.4) – heating circuit M2; until 22.10. `0x2305` = heating circuit 1 |
+| Heizkurve Niveau (heating curve level) | K, diagnostic | `0x3304` | 1 B, signed | 1800 s | ✅ (0) – heating circuit M2; until 22.10. `0x2304` |
+| Betriebsart (Rohwert) (operating mode, raw value) | diagnostic | `0x3301` | 1 B | 600 s | heating circuit M2 returns 3 (circuit 1: 0) – meaning of the values open |
 | Raumtemperatur Soll (room temperature setpoint) | °C, diagnostic | `0x2306` | 1 B | 600 s | heating circuit 1 – "no function" on this installation, value has no effect |
 | Raumsoll HK2 (room setpoint HC2) | °C | `0x3306` | 1 B, filter 3–37 °C, without 5 | 300 s | ✅ 22.10. – heating circuit 2 (mixer M2), matches ☀ under button 2 on the display |
 | Raumsoll HK2 einstellen (set room setpoint HC2) | **number (writing)**, box | `0x3306` | 1 B, 18–28 °C, step 1 | 1800 s | ✅ 22.10. – after writing it shows the **sent** value, even if it did not arrive |

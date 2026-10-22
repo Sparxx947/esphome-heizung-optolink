@@ -243,9 +243,9 @@ bekamen von HA das Präfix des Bereichs (`…heizungskeller_heizung_…`).
 | Brennerstarts | Zähler | `0x088A` | 4 B | 60 s | ✅ |
 | Brennerstunden (Stufe 1) | h, total_increasing | `0x08A7` | 4 B, Sekunden ÷ 3600 | 60 s | ✅ |
 | Ölverbrauch Regelung | Diagnose | `0x7574` | 4 B ÷ 1000 | 1800 s | immer 0 – an dieser KW2 nicht geführt |
-| Heizkurve Neigung | Diagnose | `0x2305` | 1 B ÷ 10 | 1800 s | ✅ (1,4) |
-| Heizkurve Niveau | K, Diagnose | `0x2304` | 1 B, vorzeichenbehaftet | 1800 s | ✅ (0) |
-| Betriebsart (Rohwert) | Diagnose | `0x2301` | 1 B | 600 s | Zuordnung offen |
+| Heizkurve Neigung | Diagnose | `0x3305` | 1 B ÷ 10 | 1800 s | ✅ (1,4) – Heizkreis M2; bis 22.10. `0x2305` = Heizkreis 1 |
+| Heizkurve Niveau | K, Diagnose | `0x3304` | 1 B, vorzeichenbehaftet | 1800 s | ✅ (0) – Heizkreis M2; bis 22.10. `0x2304` |
+| Betriebsart (Rohwert) | Diagnose | `0x3301` | 1 B | 600 s | Heizkreis M2 liefert 3 (Heizkreis 1: 0) – Bedeutung der Werte offen |
 | Raumtemperatur Soll | °C, Diagnose | `0x2306` | 1 B | 600 s | Heizkreis 1 – an dieser Anlage „Ohne Funktion“, Wert ohne Wirkung |
 | Raumsoll HK2 | °C | `0x3306` | 1 B, Filter 3–37 °C, ohne 5 | 300 s | ✅ 22.10. – Heizkreis 2 (Mischer M2), entspricht ☀ bei Taste 2 am Display |
 | Raumsoll HK2 einstellen | **number (schreibend)**, Box | `0x3306` | 1 B, 18–28 °C, Schritt 1 | 1800 s | ✅ 22.10. – zeigt nach dem Schreiben den **gesendeten** Wert, auch wenn er nicht ankam |
